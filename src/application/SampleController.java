@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -43,6 +44,15 @@ public class SampleController {
 	@FXML
 	private Pane pnlColor;
 	
+	@FXML
+	private TextField txtR;
+	
+	@FXML
+	private TextField txtG;
+	
+	@FXML
+	private TextField txtB;
+	
 	private Image firstImage;
 	private Image secondImage;
 	private Image imageResult;
@@ -51,6 +61,12 @@ public class SampleController {
 	@FXML
 	public void greyScaleAverage() {
 		imageResult = ImageProcess.greyScale(firstImage);
+		updateImageResult();
+	}
+	
+	@FXML
+	private void weightedAverage() {
+		imageResult = ImageProcess.calcWeightedAverage(firstImage, Integer.parseInt(txtR.getText()), Integer.parseInt(txtG.getText()), Integer.parseInt(txtB.getText()));
 		updateImageResult();
 	}
 	

@@ -47,10 +47,10 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <TextField layoutX="37.0" layoutY="15.0" />
-                        <TextField layoutX="37.0" layoutY="42.0" />
-                        <TextField layoutX="37.0" layoutY="69.0" />
-                        <Button layoutX="20.0" layoutY="111.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="165.0" text="Aplicar" />
+                        <TextField fx:id="txtR" layoutX="37.0" layoutY="15.0" />
+                        <TextField fx:id="txtG" layoutX="37.0" layoutY="42.0" />
+                        <TextField fx:id="txtB" layoutX="37.0" layoutY="69.0" />
+                        <Button layoutX="20.0" layoutY="111.0" mnemonicParsing="false" onAction="#weightedAverage" prefHeight="25.0" prefWidth="165.0" text="Aplicar" />
                      </children></AnchorPane>
             </content>
           </TitledPane>
