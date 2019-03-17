@@ -50,15 +50,15 @@ public class SampleController {
 	
 	@FXML
 	public void greyScaleAverage() {
-		firstImage = ImageProcess.greyScale(firstImage);
-		updateFirstImage();
+		imageResult = ImageProcess.greyScale(firstImage);
+		updateImageResult();
 	}
 	
 	@FXML
-	public void updateFirstImage() {
-		imageViewFirstTab.setImage(firstImage);
-		imageViewFirstTab.setFitWidth(firstImage.getWidth());
-		imageViewFirstTab.setFitHeight(firstImage.getHeight());
+	public void updateImageResult() {
+		imageViewResult.setImage(imageResult);
+		imageViewResult.setFitWidth(imageResult.getWidth());
+		imageViewResult.setFitHeight(imageResult.getHeight());
 	}
 	
 	@FXML
