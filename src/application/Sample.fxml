@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="516.0" prefWidth="740.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+   <left>
+      <Accordion BorderPane.alignment="CENTER">
+        <panes>
+          <TitledPane animated="false" text="Tornar cinza">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="39.0" layoutY="2.0" mnemonicParsing="false" onAction="#greyScaleAverage" text="Aplicar" />
+                     </children></AnchorPane>
+            </content>
+          </TitledPane>
+          <TitledPane animated="false" text="Média ponderada">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </TitledPane>
+          <TitledPane animated="false" text="untitled 3">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </TitledPane>
+        </panes>
+      </Accordion>
+   </left>
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Imagem 1">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <bottom>
+                        <Button mnemonicParsing="false" onAction="#openFirstImage" text="Abrir imagem 1" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets top="2.0" />
+                           </BorderPane.margin></Button>
+                     </bottom>
+                     <center>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <content>
+                            <AnchorPane>
+                                 <children>
+                                    <ImageView fx:id="imageViewFirstTab" fitHeight="372.0" fitWidth="534.0" onMouseMoved="#rasterImg" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </center>
+                  </BorderPane>
+               </content>
+          </Tab>
+          <Tab text="Imagem 2">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <bottom>
+                        <Button mnemonicParsing="false" onAction="#openSecondImage" text="Abrir imagem 2" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets top="2.0" />
+                           </BorderPane.margin></Button>
+                     </bottom>
+                     <center>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <content>
+                            <AnchorPane>
+                                 <children>
+                                    <ImageView fx:id="imageViewSecondTab" fitHeight="372.0" fitWidth="534.0" onMouseMoved="#rasterImg" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </center>
+                  </BorderPane>
+               </content>
+          </Tab>
+            <Tab text="Resultado">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <content>
+                              <AnchorPane>
+                                 <children>
+                                    <ImageView fx:id="imageViewResult" fitHeight="372.0" fitWidth="534.0" onMouseMoved="#rasterImg" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                     </center>
+                  </BorderPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+   <bottom>
+      <Button mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="103.0" text="Salvar" BorderPane.alignment="BOTTOM_RIGHT">
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+      </Button>
+   </bottom>
+   <top>
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="lblR" text="R" textFill="#d31e1e">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblG" text="G" textFill="#289e19">
+               <padding>
+                  <Insets left="50.0" right="50.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblB" text="B" textFill="#4018e1">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Pane fx:id="pnlColor" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-radius: 5px;">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="50.0" top="5.0" />
+               </HBox.margin>
+            </Pane>
+         </children>
+      </HBox>
+   </top>
+</BorderPane>
