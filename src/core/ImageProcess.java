@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 
 public class ImageProcess {
 	
+	//Escala de cinza
 	public static Image calcGreyScale(Image image) {
 		try {
 			int w = (int)image.getWidth();
@@ -32,6 +33,7 @@ public class ImageProcess {
 		}
 	}
 	
+	//Média ponderada
 	public static Image calcWeightedAverage(Image image, int r, int g, int b) {
 		try {
 			int w = (int)image.getWidth();
@@ -58,6 +60,7 @@ public class ImageProcess {
 		}	
 	}
 	
+	//Limiarização
 	public static Image calcThresholding(Image image, double intensity) {
 		try {
 			int w = (int)image.getWidth();
@@ -87,6 +90,30 @@ public class ImageProcess {
 			return null;
 		}
 		
+	}
+	
+	//Negativa
+	public static Image calcNegative(Image image) {
+		try {
+			int w = (int)image.getWidth();
+			int h = (int)image.getHeight();
+			
+			PixelReader pr = image.getPixelReader();
+			WritableImage wi = new WritableImage(w,h);
+			PixelWriter pw = wi.getPixelWriter();
+			
+			for(int i=0; i<w; i++) {
+				for(int j=0; j<h; j++) {
+					Color originalColor = pr.getColor(i, j);
+					Color newColor = new Color(1-originalColor.getRed(), 1-originalColor.getGreen(), 1-originalColor.getBlue(), originalColor.getOpacity());
+					pw.setColor(i, j, newColor);
+				}
+			}
+			return wi;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 

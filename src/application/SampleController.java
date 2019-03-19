@@ -62,6 +62,11 @@ public class SampleController {
 	private Image imageResult;
 	private File f;
 	
+	@FXML
+	public void negative() {
+		imageResult = ImageProcess.calcNegative(firstImage);
+		updateImageResult();
+	}
 	
 	@FXML
 	public void thresholding() {
