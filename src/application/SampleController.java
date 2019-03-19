@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -53,14 +54,24 @@ public class SampleController {
 	@FXML
 	private TextField txtB;
 	
+	@FXML
+	private Slider thresholdSlider;
+	
 	private Image firstImage;
 	private Image secondImage;
 	private Image imageResult;
 	private File f;
 	
+	
+	@FXML
+	public void thresholding() {
+		imageResult = ImageProcess.calcThresholding(firstImage, thresholdSlider.getValue());
+		updateImageResult();
+	}
+	
 	@FXML
 	public void greyScaleAverage() {
-		imageResult = ImageProcess.greyScale(firstImage);
+		imageResult = ImageProcess.calcGreyScale(firstImage);
 		updateImageResult();
 	}
 	
