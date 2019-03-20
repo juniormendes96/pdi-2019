@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import core.ImageProcess;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -21,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import utils.AlertMessage;
 
 public class SampleController {
 	
@@ -82,7 +82,7 @@ public class SampleController {
 	
 	@FXML
 	public void grayScaleAverage() {
-		imageResult = ImageProcess.calcgrayScale(firstImage);
+		imageResult = ImageProcess.calcGrayScale(firstImage);
 		updateImageResult();
 	}
 	
@@ -179,19 +179,12 @@ public class SampleController {
 				}
 			}
 		} else {
-			showMsg("Salvar imagem", 
+			AlertMessage.showMsg("Salvar imagem", 
 					"Não é possível salvar a imagem.", 
 					"Não há nenhuma imagem modificada.", 
 					AlertType.ERROR);
 		}
-  }
+	}
 	
-	 private void showMsg(String title, String header, String msg, AlertType type) {
-		  Alert alert = new Alert(type);
-		  alert.setTitle(title);
-		  alert.setHeaderText(header);
-		  alert.setContentText(msg);
-		  alert.showAndWait();
-	  }
 	
 }
