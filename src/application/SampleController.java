@@ -81,8 +81,8 @@ public class SampleController {
 	}
 	
 	@FXML
-	public void greyScaleAverage() {
-		imageResult = ImageProcess.calcGreyScale(firstImage);
+	public void grayScaleAverage() {
+		imageResult = ImageProcess.calcgrayScale(firstImage);
 		updateImageResult();
 	}
 	

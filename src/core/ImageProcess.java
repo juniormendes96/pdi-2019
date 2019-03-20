@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 public class ImageProcess {
 	
 	//Escala de cinza
-	public static Image calcGreyScale(Image image) {
+	public static Image calcgrayScale(Image image) {
 		try {
 			int w = (int)image.getWidth();
 			int h = (int)image.getHeight();
@@ -66,9 +66,9 @@ public class ImageProcess {
 			int w = (int)image.getWidth();
 			int h = (int)image.getHeight();
 			
-			Image greyScaleImage = calcGreyScale(image);
+			Image grayScaleImage = calcgrayScale(image);
 			
-			PixelReader pr = greyScaleImage.getPixelReader();
+			PixelReader pr = grayScaleImage.getPixelReader();
 			WritableImage wi = new WritableImage(w,h);
 			PixelWriter pw = wi.getPixelWriter();
 			
@@ -121,13 +121,13 @@ public class ImageProcess {
 			int w = (int)image.getWidth();
 			int h = (int)image.getHeight();
 			
-			Image greyScaleImage = calcGreyScale(image);
+			Image grayScaleImage = calcgrayScale(image);
 			
 			PixelReader pr = image.getPixelReader();
 			WritableImage wi = new WritableImage(w,h);
 			PixelWriter pw = wi.getPixelWriter();
 			
-			PixelReader greyScalePr = greyScaleImage.getPixelReader();
+			PixelReader grayScalePr = grayScaleImage.getPixelReader();
 			
 			int x = w/4;
 			
@@ -135,7 +135,7 @@ public class ImageProcess {
 				for(int j=0; j<h; j++) {
 					
 					Color originalColor = pr.getColor(i, j);
-					Color greyScaleColor = greyScalePr.getColor(i, j);
+					Color grayScaleColor = grayScalePr.getColor(i, j);
 					
 					//Primeira parte - imagem original
 					if(i < x) {
@@ -149,11 +149,11 @@ public class ImageProcess {
 					
 					//Terceira parte - limiarização
 					} else if(i > x*2 && i < x*3) {
-						if(greyScaleColor.getRed() < (127.00/255)) {
-							Color newColor = new Color(0, 0, 0, greyScaleColor.getOpacity());
+						if(grayScaleColor.getRed() < (127.00/255)) {
+							Color newColor = new Color(0, 0, 0, grayScaleColor.getOpacity());
 							pw.setColor(i, j, newColor);
 						} else {
-							Color newColor = new Color(1, 1, 1, greyScaleColor.getOpacity());
+							Color newColor = new Color(1, 1, 1, grayScaleColor.getOpacity());
 							pw.setColor(i, j, newColor);
 						}
 					
