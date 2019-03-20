@@ -115,6 +115,63 @@ public class ImageProcess {
 			return null;
 		}
 	}
+	
+	public static Image challenge1(Image image) {
+		try {
+			int w = (int)image.getWidth();
+			int h = (int)image.getHeight();
+			
+			Image greyScaleImage = calcGreyScale(image);
+			
+			PixelReader pr = image.getPixelReader();
+			WritableImage wi = new WritableImage(w,h);
+			PixelWriter pw = wi.getPixelWriter();
+			
+			PixelReader greyScalePr = greyScaleImage.getPixelReader();
+			
+			int x = w/4;
+			
+			for(int i=0; i<w; i++) {
+				for(int j=0; j<h; j++) {
+					
+					Color originalColor = pr.getColor(i, j);
+					Color greyScaleColor = greyScalePr.getColor(i, j);
+					
+					//Primeira parte - imagem original
+					if(i < x) {
+						pw.setColor(i, j, originalColor);
+					
+					//Segunda parte - escala de cinza
+					} else if(i > x && i < x*2) {
+						double average = (originalColor.getRed()+originalColor.getGreen()+originalColor.getBlue())/3;
+						Color newColor = new Color(average, average, average, originalColor.getOpacity());
+						pw.setColor(i, j, newColor);
+					
+					//Terceira parte - limiarização
+					} else if(i > x*2 && i < x*3) {
+						if(greyScaleColor.getRed() < (127.00/255)) {
+							Color newColor = new Color(0, 0, 0, greyScaleColor.getOpacity());
+							pw.setColor(i, j, newColor);
+						} else {
+							Color newColor = new Color(1, 1, 1, greyScaleColor.getOpacity());
+							pw.setColor(i, j, newColor);
+						}
+					
+					//Quarta parte - negativa
+					} else {
+						Color newColor = new Color(1-originalColor.getRed(), 1-originalColor.getGreen(), 1-originalColor.getBlue(), originalColor.getOpacity());
+						pw.setColor(i, j, newColor);
+					}
+					
+				}
+			}
+			return wi;
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 
 }

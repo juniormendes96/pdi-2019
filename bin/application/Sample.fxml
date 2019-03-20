@@ -73,6 +73,15 @@
                   </AnchorPane>
                </content>
             </TitledPane>
+            <TitledPane animated="false" text="Desafios">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="8.0" layoutY="14.0" mnemonicParsing="false" onAction="#challenge1" prefHeight="25.0" prefWidth="182.0" text="Desafio 1" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
         </panes>
       </Accordion>
    </left>

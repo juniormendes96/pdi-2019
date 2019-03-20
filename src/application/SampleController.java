@@ -63,6 +63,12 @@ public class SampleController {
 	private File f;
 	
 	@FXML
+	public void challenge1() {
+		imageResult = ImageProcess.challenge1(firstImage);
+		updateImageResult();
+	}
+	
+	@FXML
 	public void negative() {
 		imageResult = ImageProcess.calcNegative(firstImage);
 		updateImageResult();
