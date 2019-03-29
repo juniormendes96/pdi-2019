@@ -28,47 +28,49 @@ public class NoiseReduction {
 			PixelReader pr = image.getPixelReader();
 			
 			// largura X
-			for(int countX = 0; countX < width; countX++) {
+			for(int i=0; i < width; i++) {
 				
 				// altura Y
-				for(int countY = 0; countY < height; countY++) {
+				for(int j=0; j < height; j++) {
 
 					// checa se está no pixel informado
-					if(countX == positionX && countY == positionY) {
+					if(i == positionX && j == positionY) {
 																
 						// percorre todos os vizinhos
 						for(int z = 0; z < 9; z++) {
-							
-							if(z == 0) {
-								Color neighborColor = pr.getColor(countX-1, countY+1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}		
-							if(z == 2) { 
-								Color neighborColor = pr.getColor(countX+1, countY+1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
+							Color neighborColor;
+							switch(z) {
+								case 0:
+									neighborColor = pr.getColor(i-1, j+1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 2:
+									neighborColor = pr.getColor(i+1, j+1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 4:
+									neighborColor = pr.getColor(i, j);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 6:
+									neighborColor = pr.getColor(i-1, j-1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 8:
+									neighborColor = pr.getColor(i+1, j-1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
 							}
-							if(z == 4) { 
-								Color neighborColor = pr.getColor(countX, countY);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 6) { 
-								Color neighborColor = pr.getColor(countX-1, countY-1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 8) { 
-								Color neighborColor = pr.getColor(countX+1, countY-1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}							
 						}		
 						
 						// obrigatório antes de calcular mediana
@@ -102,73 +104,73 @@ public class NoiseReduction {
 			PixelReader pr = image.getPixelReader();
 			
 			// largura X
-			for(int countX = 0; countX < width; countX++) {
+			for(int i=0; i < width; i++) {
 				
 				// altura Y
-				for(int countY = 0; countY < height; countY++) {
+				for(int j=0; j < height; j++) {
 
 					// checa se está no pixel informado
-					if(countX == positionX && countY == positionY) {
+					if(i == positionX && j == positionY) {
 																
 						// percorre todos os vizinhos
 						for(int z = 0; z < 9; z++) {
-							
-							if(z == 0) {
-								Color neighborColor = pr.getColor(countX-1, countY+1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
+							Color neighborColor;
+							switch(z) {
+								case 0:
+									neighborColor = pr.getColor(i-1, j+1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 1:
+									neighborColor = pr.getColor(i, j-1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 2:
+									neighborColor = pr.getColor(i+1, j+1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 3:
+									neighborColor = pr.getColor(i-1, j);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 4:
+									neighborColor = pr.getColor(i, j);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 5:
+									neighborColor = pr.getColor(i+1, j);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 6:
+									neighborColor = pr.getColor(i-1, j-1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 7:
+									neighborColor = pr.getColor(i, j-1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 8:
+									neighborColor = pr.getColor(i+1, j-1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
 							}
-							
-							if(z == 1) { 
-								Color neighborColor = pr.getColor(countX, countY-1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 2) { 
-								Color neighborColor = pr.getColor(countX+1, countY+1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 3) { 
-								Color neighborColor = pr.getColor(countX-1, countY);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 4) { 
-								Color neighborColor = pr.getColor(countX, countY);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 5) { 
-								Color neighborColor = pr.getColor(countX+1, countY);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 6) { 
-								Color neighborColor = pr.getColor(countX-1, countY-1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 7) { 
-								Color neighborColor = pr.getColor(countX, countY-1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 8) { 
-								Color neighborColor = pr.getColor(countX+1, countY-1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}	
-							
 						}		
 						
 						// obrigatório antes de calcular mediana
@@ -202,48 +204,49 @@ public class NoiseReduction {
 			PixelReader pr = image.getPixelReader();
 			
 			// largura X
-			for(int countX = 0; countX < width; countX++) {
+			for(int i = 0; i < width; i++) {
 				
 				// altura Y
-				for(int countY = 0; countY < height; countY++) {
+				for(int j = 0; j < height; j++) {
 
 					// checa se está no pixel informado
-					if(countX == positionX && countY == positionY) {
+					if(i == positionX && j == positionY) {
 																
 						// percorre todos os vizinhos
 						for(int z = 0; z < 9; z++) {
-							
-							if(z == 1) { 
-								Color neighborColor = pr.getColor(countX, countY-1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
+							Color neighborColor;
+							switch(z) {
+								case 1:
+									neighborColor = pr.getColor(i, j-1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 3:
+									neighborColor = pr.getColor(i-1, j);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 4:
+									neighborColor = pr.getColor(i, j);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 5:
+									neighborColor = pr.getColor(i+1, j);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
+								case 7:
+									neighborColor = pr.getColor(i, j-1);
+									neighborsR.add(neighborColor.getRed());
+									neighborsG.add(neighborColor.getGreen());
+									neighborsB.add(neighborColor.getBlue());
+									break;
 							}
-							if(z == 3) { 
-								Color neighborColor = pr.getColor(countX-1, countY);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 4) { 
-								Color neighborColor = pr.getColor(countX, countY);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 5) { 
-								Color neighborColor = pr.getColor(countX+1, countY);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}
-							if(z == 7) { 
-								Color neighborColor = pr.getColor(countX, countY-1);
-								neighborsR.add(neighborColor.getRed());
-								neighborsG.add(neighborColor.getGreen());
-								neighborsB.add(neighborColor.getBlue());
-							}	
-							
 						}		
 						
 						// obrigatório antes de calcular mediana
