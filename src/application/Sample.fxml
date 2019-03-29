@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
@@ -72,6 +73,18 @@
                      </children>
                   </AnchorPane>
                </content>
+            </TitledPane>
+            <TitledPane animated="false" text="Redução de ruído">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <RadioButton fx:id="radioCross" layoutX="24.0" layoutY="25.0" mnemonicParsing="false" text="Vizinhança em cruz" />
+                        <RadioButton fx:id="radioX" layoutX="24.0" layoutY="50.0" mnemonicParsing="false" text="Vizinhança em X" />
+                        <RadioButton fx:id="radio3x3" layoutX="24.0" layoutY="77.0" mnemonicParsing="false" text="Vizinhança em 3x3" />
+                        <Button fx:id="btnReduceNoise" layoutX="22.0" layoutY="115.0" mnemonicParsing="false" onAction="#reduceNoise" prefHeight="25.0" prefWidth="152.0" text="Reduzir ruído" />
+                     </children>
+                  </AnchorPane>
+              </content>
             </TitledPane>
             <TitledPane animated="false" text="Desafios">
                <content>
