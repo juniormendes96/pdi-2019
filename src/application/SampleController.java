@@ -88,8 +88,16 @@ public class SampleController {
 	
 	@FXML
 	private void weightedAverage() {
-		imageResult = ImageProcess.calcWeightedAverage(firstImage, Integer.parseInt(txtR.getText()), Integer.parseInt(txtG.getText()), Integer.parseInt(txtB.getText()));
-		updateImageResult();
+		int r = Integer.parseInt(txtR.getText());
+		int g = Integer.parseInt(txtG.getText());
+		int b = Integer.parseInt(txtB.getText());
+		
+		if(r + g + b > 100) {
+            AlertMessage.showMsg("Escala de Cinza", "Erro", "A soma deve ser menor ou igual a 10.", AlertType.ERROR);
+		} else {
+			imageResult = ImageProcess.calcWeightedAverage(firstImage, r, g, b);
+			updateImageResult();
+		}
 	}
 	
 	@FXML

@@ -52,10 +52,10 @@ public class ImageProcess {
 			for(int i=0; i<w; i++) {
 				for(int j=0; j<h; j++) {
 					Color originalColor = pr.getColor(i, j);
-					double averageR = ((originalColor.getRed()*255+r)/2)/255;
-					double averageG = ((originalColor.getGreen()*255+g)/2)/255;
-					double averageB = ((originalColor.getBlue()*255+b)/2)/255;
-					Color newColor = new Color(averageR, averageG, averageB, originalColor.getOpacity());
+					double average = (originalColor.getRed() * r
+									+ originalColor.getGreen() * g
+									+ originalColor.getBlue() * b)/100;
+					Color newColor = new Color(average, average, average, originalColor.getOpacity());
 					pw.setColor(i, j, newColor);
 				}
 			}
