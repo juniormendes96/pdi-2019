@@ -70,13 +70,26 @@ public class SampleController {
 	
 	@FXML
 	private RadioButton radio3x3;
-
+	
+	@FXML
+	private Slider percTransp;
 	
 	private Image firstImage;
 	private Image secondImage;
 	private Image imageResult;
 	private File f;
 	
+	@FXML
+	public void addition() {
+		imageResult = ImageProcess.calcAddition(firstImage, secondImage, percTransp.getValue()/100, (100-percTransp.getValue())/100);
+		updateImageResult();
+	}
+	
+	@FXML
+	public void subtraction() {
+		imageResult = ImageProcess.calcSubtraction(firstImage, secondImage);
+		updateImageResult();
+	}
 	
 	@FXML
 	public void reduceNoise() {
