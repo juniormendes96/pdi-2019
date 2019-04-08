@@ -1,79 +1,205 @@
 package core;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import enums.NeighborEnum;
+import enums.PixelEnum;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import model.Pixel;
 import utils.AlertMessage;
 
 public class ImageProcess {
 	
 	// Adição
 	public static Image calcAddition(Image img1, Image img2, double percentImg1, double percentImg2) {
-		int w1 = (int)img1.getWidth();
-		int h1 = (int)img1.getHeight();
-		int w2 = (int)img2.getWidth();
-		int h2 = (int)img2.getHeight();
-		
-		int w = Math.min(w1, w2);
-		int h = Math.min(h1, h2);
-		
-		PixelReader prImg1 = img1.getPixelReader();
-		PixelReader prImg2 = img2.getPixelReader();
-		
-		WritableImage wi = new WritableImage(w, h);
-		PixelWriter pw = wi.getPixelWriter();
-		
-		for(int i=0; i<w; i++) {
-			for(int j=0; j<h; j++) {
-				Color originalColorImg1 = prImg1.getColor(i, j);
-				Color originalColorImg2 = prImg2.getColor(i, j);
-				double r = (originalColorImg1.getRed() * percentImg1) + (originalColorImg2.getRed() * percentImg2);
-				double g = (originalColorImg1.getGreen() * percentImg1) + (originalColorImg2.getGreen() * percentImg2);
-				double b = (originalColorImg1.getBlue() * percentImg1) + (originalColorImg2.getBlue() * percentImg2);
-				r = r > 1 ? 1 : r;
-				g = g > 1 ? 1 : g;
-				b = b > 1 ? 1 : b;
-				Color newColor = new Color(r, g, b, 1);
-				pw.setColor(i, j, newColor);
+		try {
+			int w1 = (int)img1.getWidth();
+			int h1 = (int)img1.getHeight();
+			int w2 = (int)img2.getWidth();
+			int h2 = (int)img2.getHeight();
+			
+			int w = Math.min(w1, w2);
+			int h = Math.min(h1, h2);
+			
+			PixelReader prImg1 = img1.getPixelReader();
+			PixelReader prImg2 = img2.getPixelReader();
+			
+			WritableImage wi = new WritableImage(w, h);
+			PixelWriter pw = wi.getPixelWriter();
+			
+			for(int i=0; i<w; i++) {
+				for(int j=0; j<h; j++) {
+					Color originalColorImg1 = prImg1.getColor(i, j);
+					Color originalColorImg2 = prImg2.getColor(i, j);
+					double r = (originalColorImg1.getRed() * percentImg1) + (originalColorImg2.getRed() * percentImg2);
+					double g = (originalColorImg1.getGreen() * percentImg1) + (originalColorImg2.getGreen() * percentImg2);
+					double b = (originalColorImg1.getBlue() * percentImg1) + (originalColorImg2.getBlue() * percentImg2);
+					r = r > 1 ? 1 : r;
+					g = g > 1 ? 1 : g;
+					b = b > 1 ? 1 : b;
+					Color newColor = new Color(r, g, b, 1);
+					pw.setColor(i, j, newColor);
+				}
 			}
+			return wi;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
 		}
-		return wi;
 	}
 	
 	// Subtração
 	public static Image calcSubtraction(Image img1, Image img2) {
-		int w1 = (int)img1.getWidth();
-		int h1 = (int)img1.getHeight();
-		int w2 = (int)img2.getWidth();
-		int h2 = (int)img2.getHeight();
+		try {
+			int w1 = (int)img1.getWidth();
+			int h1 = (int)img1.getHeight();
+			int w2 = (int)img2.getWidth();
+			int h2 = (int)img2.getHeight();
+			
+			int w = Math.min(w1, w2);
+			int h = Math.min(h1, h2);
+			
+			PixelReader prImg1 = img1.getPixelReader();
+			PixelReader prImg2 = img2.getPixelReader();
+			
+			WritableImage wi = new WritableImage(w, h);
+			PixelWriter pw = wi.getPixelWriter();
+			
+			for(int i=0; i<w; i++) {
+				for(int j=0; j<h; j++) {
+					Color originalColorImg1 = prImg1.getColor(i, j);
+					Color originalColorImg2 = prImg2.getColor(i, j);
+					double r = originalColorImg1.getRed() - originalColorImg2.getRed();
+					double g = originalColorImg1.getGreen() - originalColorImg2.getGreen();
+					double b = originalColorImg1.getBlue() - originalColorImg2.getBlue();
+					r = r < 0 ? 0 : r;
+					g = g < 0 ? 0 : g;
+					b = b < 0 ? 0 : b;
+					Color newColor = new Color(r, g, b, 1);
+					pw.setColor(i, j, newColor);
+				}
+			}
+			return wi;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Image reduceNoise(Image image, NeighborEnum neighbor) {
+		int w = (int) image.getWidth();
+		int h = (int) image.getHeight();
 		
-		int w = Math.min(w1, w2);
-		int h = Math.min(h1, h2);
-		
-		PixelReader prImg1 = img1.getPixelReader();
-		PixelReader prImg2 = img2.getPixelReader();
-		
+		PixelReader pr = image.getPixelReader();
 		WritableImage wi = new WritableImage(w, h);
 		PixelWriter pw = wi.getPixelWriter();
 		
-		for(int i=0; i<w; i++) {
-			for(int j=0; j<h; j++) {
-				Color originalColorImg1 = prImg1.getColor(i, j);
-				Color originalColorImg2 = prImg2.getColor(i, j);
-				double r = originalColorImg1.getRed() - originalColorImg2.getRed();
-				double g = originalColorImg1.getGreen() - originalColorImg2.getGreen();
-				double b = originalColorImg1.getBlue() - originalColorImg2.getBlue();
-				r = r < 0 ? 0 : r;
-				g = g < 0 ? 0 : g;
-				b = b < 0 ? 0 : b;
-				Color newColor = new Color(r, g, b, 1);
-				pw.setColor(i, j, newColor);
+		for (int i = 1; i < (w - 1); i++) {
+			for (int j = 1; j < (h - 1); j++) {
+
+				Color prevColor = pr.getColor(i, j);
+				Pixel p = new Pixel(prevColor.getRed(), prevColor.getGreen(), prevColor.getBlue(), i, j);
+
+				if (neighbor.equals(NeighborEnum.NEIGHBOR_CROSS)) {
+					List<Pixel> list = createNeighborC(image, p, i, j);
+
+					double medianR = median(list, PixelEnum.RED);
+					double medianG = median(list, PixelEnum.GREEN);
+					double medianB = median(list, PixelEnum.BLUE);
+
+					pw.setColor(i, j, new Color(medianR, medianG, medianB, prevColor.getOpacity()));
+				}
+
+				if (neighbor.equals(NeighborEnum.NEIGHBOR_X)) {
+					List<Pixel> list = createNeighborX(image, p, i, j);
+
+					double medianR = median(list, PixelEnum.RED);
+					double medianG = median(list, PixelEnum.GREEN);
+					double medianB = median(list, PixelEnum.BLUE);
+
+					pw.setColor(i, j, new Color(medianR, medianG, medianB, prevColor.getOpacity()));
+				}
+
+				if (neighbor.equals(NeighborEnum.NEIGHBOR_3X3)) {
+					List<Pixel> list = new ArrayList<>();
+					list.addAll(createNeighborC(image, p, i, j));
+					list.addAll(createNeighborX(image, p, i, j));
+
+					double medianR = median(list, PixelEnum.RED);
+					double medianG = median(list, PixelEnum.GREEN);
+					double medianB = median(list, PixelEnum.BLUE);
+
+					pw.setColor(i, j, new Color(medianR, medianG, medianB, prevColor.getOpacity()));
+				}
+
 			}
 		}
+
 		return wi;
+	}
+	
+	public static List<Pixel> createNeighborX(Image image, Pixel p, int x, int y) {
+		List<Pixel> neighbors = new ArrayList<>();
+		PixelReader pr = image.getPixelReader();
+
+		Color color1 = pr.getColor(x - 1, y + 1);
+		Color color2 = pr.getColor(x + 1, y - 1);
+		Color color3 = pr.getColor(x - 1, y - 1);
+		Color color4 = pr.getColor(x + 1, y + 1);
+
+		neighbors.add(new Pixel(color1.getRed(), color1.getGreen(), color1.getBlue(), x - 1, y + 1));
+		neighbors.add(new Pixel(color2.getRed(), color2.getGreen(), color2.getBlue(), x + 1, y - 1));
+		neighbors.add(new Pixel(color3.getRed(), color3.getGreen(), color3.getBlue(), x - 1, y - 1));
+		neighbors.add(new Pixel(color4.getRed(), color4.getGreen(), color4.getBlue(), x + 1, y + 1));
+		neighbors.add(p);
+
+		return neighbors;
+	}
+
+	public static List<Pixel> createNeighborC(Image image, Pixel p, int x, int y) {
+		List<Pixel> neighbors = new ArrayList<>();
+		PixelReader pr = image.getPixelReader();
+
+		Color color1 = pr.getColor(x, y - 1);
+		Color color2 = pr.getColor(x, y + 1);
+		Color color3 = pr.getColor(x - 1, y);
+		Color color4 = pr.getColor(x + 1, y);
+
+		neighbors.add(new Pixel(color1.getRed(), color1.getGreen(), color1.getBlue(), x, y - 1));
+		neighbors.add(new Pixel(color2.getRed(), color2.getGreen(), color2.getBlue(), x, y + 1));
+		neighbors.add(new Pixel(color3.getRed(), color3.getGreen(), color3.getBlue(), x - 1, y));
+		neighbors.add(new Pixel(color4.getRed(), color4.getGreen(), color4.getBlue(), x + 1, y));
+		neighbors.add(p);
+
+		return neighbors;
+	}
+
+	private static Double median(List<Pixel> pixelsList, PixelEnum pixelType) {
+		List<Double> list = new ArrayList<Double>();
+
+		if (PixelEnum.RED.equals(pixelType)) {
+			pixelsList.stream().forEach(pixel -> list.add(pixel.getRed()));
+
+		} else if (PixelEnum.GREEN.equals(pixelType)) {
+			pixelsList.stream().forEach(pixel -> list.add(pixel.getGreen()));
+
+		} else if (PixelEnum.BLUE.equals(pixelType)) {
+			pixelsList.stream().forEach(pixel -> list.add(pixel.getBlue()));
+
+		}
+
+		Collections.sort(list);
+		Integer size = list.size();
+		Double index = size.doubleValue() / 2;
+
+		return list.get(index.intValue());
 	}
 	
 	//Escala de cinza

@@ -4,12 +4,11 @@ package application;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 import core.ImageProcess;
-import core.NoiseReduction;
+import enums.NeighborEnum;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
@@ -19,8 +18,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -79,6 +76,7 @@ public class SampleController {
 	private Image imageResult;
 	private File f;
 	
+
 	@FXML
 	public void addition() {
 		imageResult = ImageProcess.calcAddition(firstImage, secondImage, percTransp.getValue()/100, (100-percTransp.getValue())/100);
@@ -93,78 +91,14 @@ public class SampleController {
 	
 	@FXML
 	public void reduceNoise() {
-		int w = (int)firstImage.getWidth();
-		int h = (int)firstImage.getHeight();
-		
-		WritableImage wi = new WritableImage(w,h);
-		PixelWriter pw = wi.getPixelWriter();
-		
-		// vizinhança em cruz
-        if(radio3x3.isSelected()) {
-
-            for(int i=1; i<(int)firstImage.getWidth()-1; i++) {
-                for(int j=1; j<(int)firstImage.getHeight()-1; j++) {
-
-                	//medianas
-                    ArrayList<Double> medians = NoiseReduction.reduction3x3(firstImage, i, j);
-
-                    Color newColor = new Color(medians.get(0),
-                            medians.get(1),
-                            medians.get(2),
-                            1);
-
-                    pw.setColor(i, j, newColor);
-
-                }
-            }
-
-            imageViewResult.setImage(wi);
-            imageViewResult.setFitWidth(wi.getWidth());
-
-        } else if (radioX.isSelected()) {
-
-            for(int i=1; i<(int)firstImage.getWidth()-1; i++) {
-                for(int j=1; j<(int)firstImage.getHeight()-1; j++) {
-
-                    ArrayList<Double> medians = NoiseReduction.reductionX(firstImage, i, j);
-
-                    Color newColor = new Color(medians.get(0),
-                            medians.get(1),
-                            medians.get(2),
-                            1);
-
-                    pw.setColor(i, j, newColor);
-
-                }
-            }
-
-            imageViewResult.setImage(wi);
-            imageViewResult.setFitWidth(wi.getWidth());
-
-        } else if (radioCross.isSelected()) {
-
-            for(int i=1; i<(int)firstImage.getWidth()-1; i++) {
-                for(int j=1; j<(int)firstImage.getHeight()-1; j++) {
-
-                    ArrayList<Double> medians = NoiseReduction.crossReduction(firstImage, i, j);
-
-                    Color newColor = new Color(medians.get(0),
-                            medians.get(1),
-                            medians.get(2),
-                            1);
-
-                    pw.setColor(i, j, newColor);
-
-                }
-            }
-
-            imageViewResult.setImage(wi);
-            imageViewResult.setFitWidth(wi.getWidth());
-
-        } else {
-            AlertMessage.showMsg("Selecione um tipo de redução", "Atenção", "É necessário selecionar uma técnica de aplicação da redução de ruído.", AlertType.WARNING);
-        }
-        
+		if(radio3x3.isSelected()) {
+			imageResult = ImageProcess.reduceNoise(firstImage, NeighborEnum.NEIGHBOR_3X3);
+		} else if(radioCross.isSelected()) {
+			imageResult = ImageProcess.reduceNoise(firstImage, NeighborEnum.NEIGHBOR_CROSS);
+		} else if(radioX.isSelected()) {
+			imageResult = ImageProcess.reduceNoise(firstImage, NeighborEnum.NEIGHBOR_X);
+		}
+		updateImageResult();
 	}
 	
 	@FXML
