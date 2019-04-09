@@ -76,6 +76,23 @@ public class SampleController {
 	private Image imageResult;
 	private File f;
 	
+	private int initialX, finalX, initialY, finalY;
+	
+	@FXML
+	public void onMousePressed(MouseEvent evt) {
+		if(imageViewFirstTab.getImage() != null) {
+			initialX = (int)evt.getX();
+			initialY = (int)evt.getX();
+		}
+	}
+	
+	@FXML
+	public void onMouseReleased(MouseEvent evt) {
+		finalX = (int)evt.getX();
+		finalY = (int)evt.getY();
+		imageResult = ImageProcess.demarcate(firstImage, initialX, finalX, initialY, finalY);
+		updateImageResult();
+	}
 
 	@FXML
 	public void addition() {
@@ -109,19 +126,31 @@ public class SampleController {
 	
 	@FXML
 	public void negative() {
-		imageResult = ImageProcess.calcNegative(firstImage);
+		if(isDemarcated()) {
+			imageResult = ImageProcess.calcNegative(firstImage, initialX, finalX, initialY, finalY);
+		} else {
+			imageResult = ImageProcess.calcNegative(firstImage, 0, 0, 0, 0);
+		}
 		updateImageResult();
 	}
 	
 	@FXML
 	public void thresholding() {
-		imageResult = ImageProcess.calcThresholding(firstImage, thresholdSlider.getValue());
+		if(isDemarcated()) {
+			imageResult = ImageProcess.calcThresholding(firstImage, thresholdSlider.getValue(), initialX, finalX, initialY, finalY);
+		} else {
+			imageResult = ImageProcess.calcThresholding(firstImage, thresholdSlider.getValue(), 0, 0, 0, 0);
+		}
 		updateImageResult();
 	}
 	
 	@FXML
 	public void grayScaleAverage() {
-		imageResult = ImageProcess.calcGrayScale(firstImage);
+		if(isDemarcated()) {
+			imageResult = ImageProcess.calcGrayScale(firstImage, initialX, finalX, initialY, finalY);
+		} else {
+			imageResult = ImageProcess.calcGrayScale(firstImage, 0, 0, 0, 0);
+		}
 		updateImageResult();
 	}
 	
@@ -134,7 +163,11 @@ public class SampleController {
 		if(r + g + b > 100) {
             AlertMessage.showMsg("Escala de Cinza", "Erro", "A soma deve ser menor ou igual a 10.", AlertType.ERROR);
 		} else {
-			imageResult = ImageProcess.calcWeightedAverage(firstImage, r, g, b);
+			if(isDemarcated()) {
+				imageResult = ImageProcess.calcWeightedAverage(firstImage, r, g, b, initialX, finalX, initialY, finalY);
+			} else {
+				imageResult = ImageProcess.calcWeightedAverage(firstImage, r, g, b, 0, 0, 0, 0);
+			}
 			updateImageResult();
 		}
 	}
@@ -231,6 +264,13 @@ public class SampleController {
 					"Não há nenhuma imagem modificada.", 
 					AlertType.ERROR);
 		}
+	}
+	
+	public boolean isDemarcated() {
+		if(initialX != 0 && finalX != 0 && initialY != 0 && finalY != 0) {
+			return true;
+		}
+		return false;
 	}
 	
 	

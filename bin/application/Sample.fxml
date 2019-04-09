@@ -132,7 +132,7 @@
                           <content>
                             <AnchorPane>
                                  <children>
-                                    <ImageView fx:id="imageViewFirstTab" fitHeight="372.0" fitWidth="534.0" onMouseMoved="#rasterImg" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <ImageView fx:id="imageViewFirstTab" fitHeight="372.0" fitWidth="534.0" onMouseMoved="#rasterImg" onMousePressed="#onMousePressed" onMouseReleased="#onMouseReleased" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                           </content>

@@ -17,6 +17,55 @@ import utils.AlertMessage;
 
 public class ImageProcess {
 	
+	public static Image demarcate(Image image, int initialX, int finalX, int initialY, int finalY) {
+		try {
+			int w = (int)image.getWidth();
+			int h = (int)image.getHeight();
+			
+			PixelReader pr = image.getPixelReader();
+			
+			WritableImage wi = new WritableImage(w,h);
+			PixelWriter pw = wi.getPixelWriter();
+			
+			for (int i = 0; i < w; i++) {
+				for (int j = 0; j < h; j++) {
+					Color prevColor = pr.getColor(i, j);
+					pw.setColor(i, j, prevColor);
+				}
+			}
+			
+			for (int i = initialX; i < finalX; i++) {
+				Color prevColor = pr.getColor(i, initialY);
+				if (i <= finalX) {
+					double color1 = (1);
+					double color2 = (0);
+					double color3 = (0);
+					Color newColor = new Color(color1, color2, color3, prevColor.getOpacity());
+					pw.setColor(i, initialY, newColor);
+					pw.setColor(i, finalY, newColor);
+				}
+			}
+			
+			for (int i = initialY; i < finalY; i++) {
+				Color prevColor = pr.getColor(initialX, i);
+				if (i <= finalY) {
+					double color1 = (1);
+					double color2 = (0);
+					double color3 = (0);
+					Color newColor = new Color(color1, color2, color3, prevColor.getOpacity());
+					pw.setColor(initialX, i, newColor);
+					pw.setColor(finalX, i, newColor);
+				}
+			}	
+		
+			return wi;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	
+	}
+	
 	// Adição
 	public static Image calcAddition(Image img1, Image img2, double percentImg1, double percentImg2) {
 		try {
@@ -203,8 +252,9 @@ public class ImageProcess {
 	}
 	
 	//Escala de cinza
-	public static Image calcGrayScale(Image image) {
+	public static Image calcGrayScale(Image image, int initialX, int finalX, int initialY, int finalY) {
 		try {
+			
 			int w = (int)image.getWidth();
 			int h = (int)image.getHeight();
 			
@@ -212,12 +262,23 @@ public class ImageProcess {
 			WritableImage wi = new WritableImage(w,h);
 			PixelWriter pw = wi.getPixelWriter();
 			
-			for(int i=0; i<w; i++) {
-				for(int j=0; j<h; j++) {
-					Color originalColor = pr.getColor(i,j);
-					double average = (originalColor.getRed()+originalColor.getGreen()+originalColor.getBlue())/3;
-					Color newColor = new Color(average, average, average, originalColor.getOpacity());
-					pw.setColor(i, j, newColor);
+			if(isDemarcated(initialX, finalX, initialY, finalY)) {
+				for(int i= initialX; i<finalX; i++) {
+					for(int j= initialY; j<finalY; j++) {
+						Color originalColor = pr.getColor(i,j);
+						double average = (originalColor.getRed()+originalColor.getGreen()+originalColor.getBlue())/3;
+						Color newColor = new Color(average, average, average, originalColor.getOpacity());
+						pw.setColor(i, j, newColor);
+					}
+				}
+			} else {
+				for (int i = 0; i < w; i++) {
+					for (int j = 0; j < h; j++) {
+						Color originalColor = pr.getColor(i,j);
+						double average = (originalColor.getRed()+originalColor.getGreen()+originalColor.getBlue())/3;
+						Color newColor = new Color(average, average, average, originalColor.getOpacity());
+						pw.setColor(i, j, newColor);
+					}
 				}
 			}
 			return wi;
@@ -232,7 +293,7 @@ public class ImageProcess {
 	}
 	
 	// Média ponderada
-	public static Image calcWeightedAverage(Image image, int r, int g, int b) {
+	public static Image calcWeightedAverage(Image image, int r, int g, int b, int initialX, int finalX, int initialY, int finalY) {
 		try {
 			int w = (int)image.getWidth();
 			int h = (int)image.getHeight();
@@ -241,16 +302,30 @@ public class ImageProcess {
 			WritableImage wi = new WritableImage(w,h);
 			PixelWriter pw = wi.getPixelWriter();
 			
-			for(int i=0; i<w; i++) {
-				for(int j=0; j<h; j++) {
-					Color originalColor = pr.getColor(i, j);
-					double average = (originalColor.getRed() * r
-									+ originalColor.getGreen() * g
-									+ originalColor.getBlue() * b)/100;
-					Color newColor = new Color(average, average, average, originalColor.getOpacity());
-					pw.setColor(i, j, newColor);
+			if(isDemarcated(initialX, finalX, initialY, finalY)) {
+				for(int i=initialX; i<finalX; i++) {
+					for(int j=initialY; j<finalY; j++) {
+						Color originalColor = pr.getColor(i, j);
+						double average = (originalColor.getRed() * r
+										+ originalColor.getGreen() * g
+										+ originalColor.getBlue() * b)/100;
+						Color newColor = new Color(average, average, average, originalColor.getOpacity());
+						pw.setColor(i, j, newColor);
+					}
+				}
+			} else {
+				for(int i=0; i<w; i++) {
+					for(int j=0; j<h; j++) {
+						Color originalColor = pr.getColor(i, j);
+						double average = (originalColor.getRed() * r
+										+ originalColor.getGreen() * g
+										+ originalColor.getBlue() * b)/100;
+						Color newColor = new Color(average, average, average, originalColor.getOpacity());
+						pw.setColor(i, j, newColor);
+					}
 				}
 			}
+			
 			return wi;
 		} catch (Exception e) {
 			if(e instanceof NullPointerException) {
@@ -263,28 +338,43 @@ public class ImageProcess {
 	}
 	
 	// Limiarização
-	public static Image calcThresholding(Image image, double intensity) {
+	public static Image calcThresholding(Image image, double intensity, int initialX, int finalX, int initialY, int finalY) {
 		try {
 			int w = (int)image.getWidth();
 			int h = (int)image.getHeight();
 			
-			Image grayScaleImage = calcGrayScale(image);
+			Image grayScaleImage = calcGrayScale(image, 0, 0, 0, 0);
 			
 			PixelReader pr = grayScaleImage.getPixelReader();
 			WritableImage wi = new WritableImage(w,h);
 			PixelWriter pw = wi.getPixelWriter();
 			
-			for(int i=0; i<w; i++) {
-				for(int j=0; j<h; j++) {
-					Color originalColor = pr.getColor(i, j);
-					if(originalColor.getRed() < (intensity/255)) {
-						Color newColor = new Color(0, 0, 0, originalColor.getOpacity());
-						pw.setColor(i, j, newColor);
-					} else {
-						Color newColor = new Color(1, 1, 1, originalColor.getOpacity());
-						pw.setColor(i, j, newColor);
-					}
-				}	
+			if(isDemarcated(initialX, finalX, initialY, finalY)) {
+				for(int i=initialX; i<finalX; i++) {
+					for(int j=initialY; j<finalY; j++) {
+						Color originalColor = pr.getColor(i, j);
+						if(originalColor.getRed() < (intensity/255)) {
+							Color newColor = new Color(0, 0, 0, originalColor.getOpacity());
+							pw.setColor(i, j, newColor);
+						} else {
+							Color newColor = new Color(1, 1, 1, originalColor.getOpacity());
+							pw.setColor(i, j, newColor);
+						}
+					}	
+				}
+			} else {
+				for(int i=0; i<w; i++) {
+					for(int j=0; j<h; j++) {
+						Color originalColor = pr.getColor(i, j);
+						if(originalColor.getRed() < (intensity/255)) {
+							Color newColor = new Color(0, 0, 0, originalColor.getOpacity());
+							pw.setColor(i, j, newColor);
+						} else {
+							Color newColor = new Color(1, 1, 1, originalColor.getOpacity());
+							pw.setColor(i, j, newColor);
+						}
+					}	
+				}
 			}
 			return wi;
 		} catch (Exception e) {
@@ -299,7 +389,7 @@ public class ImageProcess {
 	}
 	
 	// Negativa
-	public static Image calcNegative(Image image) {
+	public static Image calcNegative(Image image, int initialX, int finalX, int initialY, int finalY) {
 		try {
 			int w = (int)image.getWidth();
 			int h = (int)image.getHeight();
@@ -308,11 +398,21 @@ public class ImageProcess {
 			WritableImage wi = new WritableImage(w,h);
 			PixelWriter pw = wi.getPixelWriter();
 			
-			for(int i=0; i<w; i++) {
-				for(int j=0; j<h; j++) {
-					Color originalColor = pr.getColor(i, j);
-					Color newColor = new Color(1-originalColor.getRed(), 1-originalColor.getGreen(), 1-originalColor.getBlue(), originalColor.getOpacity());
-					pw.setColor(i, j, newColor);
+			if(isDemarcated(initialX, finalX, initialY, finalY)) {
+				for(int i=initialX; i<finalX; i++) {
+					for(int j=initialY; j<finalY; j++) {
+						Color originalColor = pr.getColor(i, j);
+						Color newColor = new Color(1-originalColor.getRed(), 1-originalColor.getGreen(), 1-originalColor.getBlue(), originalColor.getOpacity());
+						pw.setColor(i, j, newColor);
+					}
+				}
+			} else {
+				for(int i=0; i<w; i++) {
+					for(int j=0; j<h; j++) {
+						Color originalColor = pr.getColor(i, j);
+						Color newColor = new Color(1-originalColor.getRed(), 1-originalColor.getGreen(), 1-originalColor.getBlue(), originalColor.getOpacity());
+						pw.setColor(i, j, newColor);
+					}
 				}
 			}
 			return wi;
@@ -331,7 +431,7 @@ public class ImageProcess {
 			int w = (int)image.getWidth();
 			int h = (int)image.getHeight();
 			
-			Image grayScaleImage = calcGrayScale(image);
+			Image grayScaleImage = calcGrayScale(image, 0, 0, 0, 0);
 			
 			PixelReader pr = image.getPixelReader();
 			WritableImage wi = new WritableImage(w,h);
@@ -398,6 +498,13 @@ public class ImageProcess {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static boolean isDemarcated(int initialX, int finalX, int initialY, int finalY) {
+		if(initialX != 0 && finalX != 0 && initialY != 0 && finalY != 0) {
+			return true;
+		}
+		return false;
 	}
 
 
