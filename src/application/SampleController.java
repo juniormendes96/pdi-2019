@@ -82,7 +82,7 @@ public class SampleController {
 	public void onMousePressed(MouseEvent evt) {
 		if(imageViewFirstTab.getImage() != null) {
 			initialX = (int)evt.getX();
-			initialY = (int)evt.getX();
+			initialY = (int)evt.getY();
 		}
 	}
 	

@@ -17,8 +17,28 @@ import utils.AlertMessage;
 
 public class ImageProcess {
 	
+	// Demarcação da imagem
 	public static Image demarcate(Image image, int initialX, int finalX, int initialY, int finalY) {
 		try {
+			
+			// Tratamento caso o clique seja de baixo pra cima
+			
+			int aux;
+			
+			if(initialX > finalX) {
+				aux = initialX;
+				initialX = finalX;
+				finalX = aux;
+			}
+			
+			if(initialY > finalY) {
+				aux = initialY;
+				initialY = finalY;
+				finalY = aux;
+			}
+			
+			// Final tratamento
+			
 			int w = (int)image.getWidth();
 			int h = (int)image.getHeight();
 			
@@ -27,37 +47,29 @@ public class ImageProcess {
 			WritableImage wi = new WritableImage(w,h);
 			PixelWriter pw = wi.getPixelWriter();
 			
-			for (int i = 0; i < w; i++) {
-				for (int j = 0; j < h; j++) {
-					Color prevColor = pr.getColor(i, j);
-					pw.setColor(i, j, prevColor);
+			// coluna
+			for(int i=0; i<w; i++) {
+				// linha
+				for(int j=0; j<h; j++) {
+					Color originalColor = pr.getColor(i, j);
+					Color redColor = new Color(1, 0, 0, originalColor.getOpacity());
+					if(i == initialX || i == finalX) {
+						if(j >= initialY && j <= finalY) {
+							pw.setColor(i, j, redColor);
+						} else {
+							pw.setColor(i, j, originalColor);
+						}
+					} else if(j == initialY || j == finalY) {
+						if(i >= initialX && i <= finalX) {
+							pw.setColor(i, j, redColor);
+						} else {
+							pw.setColor(i, j, originalColor);
+						}
+					} else {
+						pw.setColor(i, j, originalColor);
+					}	
 				}
 			}
-			
-			for (int i = initialX; i < finalX; i++) {
-				Color prevColor = pr.getColor(i, initialY);
-				if (i <= finalX) {
-					double color1 = (1);
-					double color2 = (0);
-					double color3 = (0);
-					Color newColor = new Color(color1, color2, color3, prevColor.getOpacity());
-					pw.setColor(i, initialY, newColor);
-					pw.setColor(i, finalY, newColor);
-				}
-			}
-			
-			for (int i = initialY; i < finalY; i++) {
-				Color prevColor = pr.getColor(initialX, i);
-				if (i <= finalY) {
-					double color1 = (1);
-					double color2 = (0);
-					double color3 = (0);
-					Color newColor = new Color(color1, color2, color3, prevColor.getOpacity());
-					pw.setColor(initialX, i, newColor);
-					pw.setColor(finalX, i, newColor);
-				}
-			}	
-		
 			return wi;
 		} catch (Exception e) {
 			e.printStackTrace();
