@@ -217,6 +217,11 @@
                   <Insets bottom="5.0" left="50.0" top="5.0" />
                </HBox.margin>
             </Pane>
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#openHistogramModal" text="Abrir Histogramas">
+               <HBox.margin>
+                  <Insets left="70.0" />
+               </HBox.margin>
+            </Button>
          </children>
       </HBox>
    </top>

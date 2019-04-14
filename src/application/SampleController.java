@@ -10,7 +10,12 @@ import javax.imageio.ImageIO;
 import core.ImageProcess;
 import enums.NeighborEnum;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -22,6 +27,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import utils.AlertMessage;
 
 public class SampleController {
@@ -77,6 +83,32 @@ public class SampleController {
 	private File f;
 	
 	private int initialX, finalX, initialY, finalY;
+	
+	@FXML
+	public void openHistogramModal(ActionEvent event) {
+		try {
+			Stage stage = new Stage();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("HistogramModal.fxml"));
+			Parent root = loader.load();
+			stage.setScene(new Scene(root));
+			stage.setTitle("Histogramas");
+			stage.initOwner(((Node)event.getSource()).getScene().getWindow());
+			stage.show();
+			
+			HistogramModalController controller = (HistogramModalController)loader.getController();
+			if(firstImage != null) {
+				ImageProcess.getGraph(firstImage, controller.barChartImg1);
+			}
+			if(secondImage != null) {
+				ImageProcess.getGraph(secondImage, controller.barChartImg2);
+			}
+			if(imageResult != null) {
+				ImageProcess.getGraph(imageResult, controller.barChartImg3);
+			}	
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@FXML
 	public void onMousePressed(MouseEvent evt) {

@@ -6,6 +6,8 @@ import java.util.List;
 
 import enums.NeighborEnum;
 import enums.PixelEnum;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -17,11 +19,68 @@ import utils.AlertMessage;
 
 public class ImageProcess {
 	
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public static void getGraph(Image image, BarChart<String, Number> graph) {
+		int[] hist = histogram(image, ' ');
+		XYChart.Series vlr = new XYChart.Series();
+		for(int i=0; i<hist.length; i++) {
+			vlr.getData().add(new XYChart.Data(i+"", hist[i]));
+		}
+		graph.getData().addAll(vlr);
+	}
+	
+	// Histograma acumulado
+	public static int[] accumulatedHistogram(int[] histogram) {
+		int[] accumulatedHistogram = new int[256];
+		int sum = histogram[0];
+		for(int i=0; i<histogram.length; i++) {
+			accumulatedHistogram[i] = sum;
+			sum += accumulatedHistogram[i];
+		}
+		return accumulatedHistogram;
+	}
+	
+	// Histograma
+	public static int[] histogram(Image image, char channel) {
+		
+		int[] qt = new int[256];
+		
+		int w = (int)image.getWidth();
+		int h = (int)image.getHeight();
+		
+		PixelReader pr = image.getPixelReader();
+		
+		for(int i=0; i<w; i++) {
+			for(int j=0; j<h; j++) {
+				Color color = pr.getColor(i, j);
+				switch(channel) {
+					case 'r':
+					case 'R':
+						qt[(int)(color.getRed()*255)]++;	
+						break;
+					case 'g':
+					case 'G':
+						qt[(int)(color.getGreen()*255)]++;
+						break;
+					case 'b':
+					case 'B':
+						qt[(int)(color.getBlue()*255)]++;
+						break;
+					default:
+						qt[(int)(color.getRed()*255)]++;
+						qt[(int)(color.getGreen()*255)]++;
+						qt[(int)(color.getBlue()*255)]++;
+				}	
+			}
+		}
+		return qt;
+	}
+	
 	// Demarcação da imagem
 	public static Image demarcate(Image image, int initialX, int finalX, int initialY, int finalY) {
 		try {
 			
-			// Tratamento caso o clique seja de baixo pra cima
+			// <Tratamento caso o clique seja de baixo pra cima>
 			
 			int aux;
 			
@@ -37,7 +96,7 @@ public class ImageProcess {
 				finalY = aux;
 			}
 			
-			// Final tratamento
+			// </Tratamento caso o clique seja de baixo pra cima>
 			
 			int w = (int)image.getWidth();
 			int h = (int)image.getHeight();
