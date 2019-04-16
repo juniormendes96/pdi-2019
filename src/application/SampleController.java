@@ -85,6 +85,12 @@ public class SampleController {
 	private int initialX, finalX, initialY, finalY;
 	
 	@FXML
+	public void equalizeHistogram() {
+		imageResult = ImageProcess.equalizeHistogram(firstImage);
+		updateImageResult();
+	}
+	
+	@FXML
 	public void openHistogramModal(ActionEvent event) {
 		try {
 			Stage stage = new Stage();

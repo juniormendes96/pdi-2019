@@ -19,6 +19,37 @@ import utils.AlertMessage;
 
 public class ImageProcess {
 	
+	public static Image equalizeHistogram(Image image) {
+		int w = (int) image.getWidth();
+        int h = (int) image.getHeight();
+        WritableImage wi = new WritableImage(w, h);
+        PixelReader pr = image.getPixelReader();
+        PixelWriter pw = wi.getPixelWriter();
+        
+        double n = w * h;
+        
+        int[] histR = histogram(image, 'r');
+        int[] histG = histogram(image, 'g');
+        int[] histB = histogram(image, 'b');
+        int[] histAcR = accumulatedHistogram(histR);
+        int[] histAcG = accumulatedHistogram(histG);
+        int[] histAcB = accumulatedHistogram(histB);
+        
+        double r, g, b;
+        
+        for (int i=0; i<w; i++) {
+            for (int j=0; j<h; j++) {
+                Color color = pr.getColor(i, j);
+                r = ((254.0 / n) * histAcR[(int) (color.getRed() * 255)])/255;
+                g = ((254.0 / n) * histAcG[(int) (color.getGreen() * 255)])/255;
+                b = ((254.0 / n) * histAcB[(int) (color.getBlue() * 255)])/255;
+                Color newColor = new Color(r, g, b, color.getOpacity());
+                pw.setColor(i, j, newColor);
+            }
+        }
+        return wi;
+	}
+	
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static void getGraph(Image image, BarChart<String, Number> graph) {
 		int[] hist = histogram(image, ' ');
@@ -31,11 +62,11 @@ public class ImageProcess {
 	
 	// Histograma acumulado
 	public static int[] accumulatedHistogram(int[] histogram) {
-		int[] accumulatedHistogram = new int[256];
+		int[] accumulatedHistogram = new int[histogram.length];
 		int sum = histogram[0];
-		for(int i=0; i<histogram.length; i++) {
+		for(int i=0; i<histogram.length-1; i++) {
 			accumulatedHistogram[i] = sum;
-			sum += accumulatedHistogram[i];
+			sum += histogram[i+1];
 		}
 		return accumulatedHistogram;
 	}
@@ -154,13 +185,15 @@ public class ImageProcess {
 			WritableImage wi = new WritableImage(w, h);
 			PixelWriter pw = wi.getPixelWriter();
 			
+			double r, g, b;
+			
 			for(int i=0; i<w; i++) {
 				for(int j=0; j<h; j++) {
 					Color originalColorImg1 = prImg1.getColor(i, j);
 					Color originalColorImg2 = prImg2.getColor(i, j);
-					double r = (originalColorImg1.getRed() * percentImg1) + (originalColorImg2.getRed() * percentImg2);
-					double g = (originalColorImg1.getGreen() * percentImg1) + (originalColorImg2.getGreen() * percentImg2);
-					double b = (originalColorImg1.getBlue() * percentImg1) + (originalColorImg2.getBlue() * percentImg2);
+					r = (originalColorImg1.getRed() * percentImg1) + (originalColorImg2.getRed() * percentImg2);
+					g = (originalColorImg1.getGreen() * percentImg1) + (originalColorImg2.getGreen() * percentImg2);
+					b = (originalColorImg1.getBlue() * percentImg1) + (originalColorImg2.getBlue() * percentImg2);
 					r = r > 1 ? 1 : r;
 					g = g > 1 ? 1 : g;
 					b = b > 1 ? 1 : b;
@@ -192,13 +225,15 @@ public class ImageProcess {
 			WritableImage wi = new WritableImage(w, h);
 			PixelWriter pw = wi.getPixelWriter();
 			
+			double r, g, b;
+			
 			for(int i=0; i<w; i++) {
 				for(int j=0; j<h; j++) {
 					Color originalColorImg1 = prImg1.getColor(i, j);
 					Color originalColorImg2 = prImg2.getColor(i, j);
-					double r = originalColorImg1.getRed() - originalColorImg2.getRed();
-					double g = originalColorImg1.getGreen() - originalColorImg2.getGreen();
-					double b = originalColorImg1.getBlue() - originalColorImg2.getBlue();
+					r = originalColorImg1.getRed() - originalColorImg2.getRed();
+					g = originalColorImg1.getGreen() - originalColorImg2.getGreen();
+					b = originalColorImg1.getBlue() - originalColorImg2.getBlue();
 					r = r < 0 ? 0 : r;
 					g = g < 0 ? 0 : g;
 					b = b < 0 ? 0 : b;
@@ -221,8 +256,10 @@ public class ImageProcess {
 		WritableImage wi = new WritableImage(w, h);
 		PixelWriter pw = wi.getPixelWriter();
 		
-		for (int i = 1; i < (w - 1); i++) {
-			for (int j = 1; j < (h - 1); j++) {
+		double medianR, medianG, medianB;
+		
+		for (int i=1; i<(w-1); i++) {
+			for (int j=1; j<(h-1); j++) {
 
 				Color prevColor = pr.getColor(i, j);
 				Pixel p = new Pixel(prevColor.getRed(), prevColor.getGreen(), prevColor.getBlue(), i, j);
@@ -230,9 +267,9 @@ public class ImageProcess {
 				if (neighbor.equals(NeighborEnum.NEIGHBOR_CROSS)) {
 					List<Pixel> list = createNeighborC(image, p, i, j);
 
-					double medianR = median(list, PixelEnum.RED);
-					double medianG = median(list, PixelEnum.GREEN);
-					double medianB = median(list, PixelEnum.BLUE);
+					medianR = median(list, PixelEnum.RED);
+					medianG = median(list, PixelEnum.GREEN);
+					medianB = median(list, PixelEnum.BLUE);
 
 					pw.setColor(i, j, new Color(medianR, medianG, medianB, prevColor.getOpacity()));
 				}
@@ -240,9 +277,9 @@ public class ImageProcess {
 				if (neighbor.equals(NeighborEnum.NEIGHBOR_X)) {
 					List<Pixel> list = createNeighborX(image, p, i, j);
 
-					double medianR = median(list, PixelEnum.RED);
-					double medianG = median(list, PixelEnum.GREEN);
-					double medianB = median(list, PixelEnum.BLUE);
+					medianR = median(list, PixelEnum.RED);
+					medianG = median(list, PixelEnum.GREEN);
+					medianB = median(list, PixelEnum.BLUE);
 
 					pw.setColor(i, j, new Color(medianR, medianG, medianB, prevColor.getOpacity()));
 				}
@@ -252,9 +289,9 @@ public class ImageProcess {
 					list.addAll(createNeighborC(image, p, i, j));
 					list.addAll(createNeighborX(image, p, i, j));
 
-					double medianR = median(list, PixelEnum.RED);
-					double medianG = median(list, PixelEnum.GREEN);
-					double medianB = median(list, PixelEnum.BLUE);
+					medianR = median(list, PixelEnum.RED);
+					medianG = median(list, PixelEnum.GREEN);
+					medianB = median(list, PixelEnum.BLUE);
 
 					pw.setColor(i, j, new Color(medianR, medianG, medianB, prevColor.getOpacity()));
 				}
