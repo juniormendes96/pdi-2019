@@ -246,8 +246,7 @@ public class SampleController {
 					   "Imagens", "*.jpg", "*.JPG", 
 					   "*.png", "*.PNG", "*.gif", "*.GIF", 
 					   "*.bmp", "*.BMP")); 	
-	   fileChooser.setInitialDirectory(new File(
-			   "C:\\Users\\vilma\\eclipse-workspace\\Pdi-2019\\images"));
+	   //fileChooser.setInitialDirectory(new File("C:\\Users\\User\\workspace\\Pdi-2019\\images"));
 	   File selectedImage = fileChooser.showOpenDialog(null);
 	   try {
 		   if (selectedImage != null) {
