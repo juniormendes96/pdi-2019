@@ -21,33 +21,33 @@ public class ImageProcess {
 	
 	public static Image equalizeHistogram(Image image) {
 		int w = (int) image.getWidth();
-        int h = (int) image.getHeight();
-        WritableImage wi = new WritableImage(w, h);
-        PixelReader pr = image.getPixelReader();
-        PixelWriter pw = wi.getPixelWriter();
-        
-        double n = w * h;
-        
-        int[] histR = histogram(image, 'r');
-        int[] histG = histogram(image, 'g');
-        int[] histB = histogram(image, 'b');
-        int[] histAcR = accumulatedHistogram(histR);
-        int[] histAcG = accumulatedHistogram(histG);
-        int[] histAcB = accumulatedHistogram(histB);
-        
-        double r, g, b;
-        
-        for (int i=0; i<w; i++) {
-            for (int j=0; j<h; j++) {
-                Color color = pr.getColor(i, j);
-                r = ((254.0 / n) * histAcR[(int) (color.getRed() * 255)])/255;
-                g = ((254.0 / n) * histAcG[(int) (color.getGreen() * 255)])/255;
-                b = ((254.0 / n) * histAcB[(int) (color.getBlue() * 255)])/255;
-                Color newColor = new Color(r, g, b, color.getOpacity());
-                pw.setColor(i, j, newColor);
-            }
-        }
-        return wi;
+		int h = (int) image.getHeight();
+		WritableImage wi = new WritableImage(w, h);
+		PixelReader pr = image.getPixelReader();
+		PixelWriter pw = wi.getPixelWriter();
+
+		double n = w * h;
+
+		int[] histR = histogram(image, 'r');
+		int[] histG = histogram(image, 'g');
+		int[] histB = histogram(image, 'b');
+		int[] histAcR = accumulatedHistogram(histR);
+		int[] histAcG = accumulatedHistogram(histG);
+		int[] histAcB = accumulatedHistogram(histB);
+
+		double r, g, b;
+
+		for (int i=0; i<w; i++) {
+		    for (int j=0; j<h; j++) {
+			Color color = pr.getColor(i, j);
+			r = ((254.0 / n) * histAcR[(int) (color.getRed() * 255)])/255;
+			g = ((254.0 / n) * histAcG[(int) (color.getGreen() * 255)])/255;
+			b = ((254.0 / n) * histAcB[(int) (color.getBlue() * 255)])/255;
+			Color newColor = new Color(r, g, b, color.getOpacity());
+			pw.setColor(i, j, newColor);
+		    }
+		}
+		return wi;
 	}
 	
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -107,7 +107,7 @@ public class ImageProcess {
 		return qt;
 	}
 	
-	// Demarcação da imagem
+	// DemarcaÃ§Ã£o da imagem
 	public static Image demarcate(Image image, int initialX, int finalX, int initialY, int finalY) {
 		try {
 			
@@ -168,7 +168,7 @@ public class ImageProcess {
 	
 	}
 	
-	// Adição
+	// AdiÃ§Ã£o
 	public static Image calcAddition(Image img1, Image img2, double percentImg1, double percentImg2) {
 		try {
 			int w1 = (int)img1.getWidth();
@@ -208,7 +208,7 @@ public class ImageProcess {
 		}
 	}
 	
-	// Subtração
+	// SubtraÃ§Ã£o
 	public static Image calcSubtraction(Image img1, Image img2) {
 		try {
 			int w1 = (int)img1.getWidth();
@@ -400,7 +400,7 @@ public class ImageProcess {
 		}
 	}
 	
-	// Média ponderada
+	// MÃ©dia ponderada
 	public static Image calcWeightedAverage(Image image, int r, int g, int b, int initialX, int finalX, int initialY, int finalY) {
 		try {
 			int w = (int)image.getWidth();
@@ -445,7 +445,7 @@ public class ImageProcess {
 		}
 	}
 	
-	// Limiarização
+	// LimiarizaÃ§Ã£o
 	public static Image calcThresholding(Image image, double intensity, int initialX, int finalX, int initialY, int finalY) {
 		try {
 			int w = (int)image.getWidth();
@@ -557,14 +557,14 @@ public class ImageProcess {
 					Color grayScaleColor = grayScalePr.getColor(i, j);
 					
 					// Primeira parte - imagem original
-					/* Supondo que w = 1000, então:
+					/* Supondo que w = 1000, entÃ£o:
 					   se i < 250
 					*/
 					if(i < x) {
 						pw.setColor(i, j, originalColor);
 					
 					// Segunda parte - escala de cinza
-					/* Supondo que w = 1000, então:
+					/* Supondo que w = 1000, entÃ£o:
 					   se i > 250 e i < 500
 					*/
 					} else if(i > x && i < x*2) {
@@ -572,8 +572,8 @@ public class ImageProcess {
 						Color newColor = new Color(average, average, average, originalColor.getOpacity());
 						pw.setColor(i, j, newColor);
 					
-					// Terceira parte - limiarização
-					/* Supondo que w = 1000, então:
+					// Terceira parte - limiarizaÃ§Ã£o
+					/* Supondo que w = 1000, entÃ£o:
 					   se i > 500 e i < 750
 					*/
 					} else if(i > x*2 && i < x*3) {
@@ -586,7 +586,7 @@ public class ImageProcess {
 						}
 					
 					// Quarta parte - negativa
-					/* Supondo que w = 1000, então:
+					/* Supondo que w = 1000, entÃ£o:
 					   se i > 750
 					*/
 					} else {
