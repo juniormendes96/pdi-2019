@@ -1,4 +1,4 @@
-package application;
+package controller;
 
 
 import java.awt.image.BufferedImage;
@@ -115,7 +115,7 @@ public class SampleController {
 	public void openHistogramModal(ActionEvent event) {
 		try {
 			Stage stage = new Stage();
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("HistogramModal.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HistogramModal.fxml"));
 			Parent root = loader.load();
 			stage.setScene(new Scene(root));
 			stage.setTitle("Histogramas");
