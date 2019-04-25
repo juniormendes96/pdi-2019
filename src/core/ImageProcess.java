@@ -16,8 +16,54 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import model.Pixel;
 import utils.AlertMessage;
+import utils.ColorUtils;
 
-public class ImageProcess {
+public class ImageProcess {	
+	
+	// Desafio Segmentação
+	public static Image segmentate(Image image, Color color1, Color color2, Color color3) {
+		try {
+			int w = (int)image.getWidth();
+			int h = (int)image.getHeight();
+			
+			PixelReader pr = image.getPixelReader();
+			WritableImage wi = new WritableImage(w, h);
+			PixelWriter pw = wi.getPixelWriter();
+
+			Color originalColor;
+			
+			double differenceColor1;
+			double differenceColor2;
+			double differenceColor3;
+			
+			double minValue;
+				
+			for(int i=0; i<w; i++) {
+				for(int j=0; j<h; j++) {
+					originalColor = pr.getColor(i, j);
+					
+					differenceColor1 = ColorUtils.getColorDifference(originalColor, color1);
+					differenceColor2 = ColorUtils.getColorDifference(originalColor, color2);
+					differenceColor3 = ColorUtils.getColorDifference(originalColor, color3);
+					
+					minValue = Math.min(differenceColor1, Math.min(differenceColor2, differenceColor3));
+					
+					if(minValue == differenceColor1) {
+						pw.setColor(i, j, color1);
+					} else if(minValue == differenceColor2) {
+						pw.setColor(i, j, color2);
+					} else if(minValue == differenceColor3) {
+						pw.setColor(i, j, color3);
+					}
+				}
+			}	
+			return wi;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 	
 	public static Image equalizeHistogram(Image image) {
 		int w = (int) image.getWidth();

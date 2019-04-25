@@ -17,6 +17,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
@@ -77,12 +79,31 @@ public class SampleController {
 	@FXML
 	private Slider percTransp;
 	
+	@FXML
+	private ColorPicker colorPicker1;
+	
+	@FXML
+	private ColorPicker colorPicker2;
+	
+	@FXML
+	private ColorPicker colorPicker3;
+	
+	@FXML
+	private Button btnChallenge2;
+	
 	private Image firstImage;
 	private Image secondImage;
 	private Image imageResult;
-	private File f;
+	private File f; 
 	
 	private int initialX, finalX, initialY, finalY;
+	
+	// Desafio Segmentação
+	@FXML
+	public void challenge2() {
+		imageResult = ImageProcess.segmentate(firstImage, colorPicker1.getValue(), colorPicker2.getValue(), colorPicker3.getValue());
+		updateImageResult();
+	}
 	
 	@FXML
 	public void equalizeHistogram() {
