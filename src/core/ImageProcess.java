@@ -65,6 +65,7 @@ public class ImageProcess {
 		
 	}
 	
+	// Simulado 1 questão 1
 	public static Image simulatedTestQuestion1(Image image, int pixelDistance, Color pixelColor) {
 		try {
 			int w = (int) image.getWidth();
@@ -93,6 +94,7 @@ public class ImageProcess {
 		}
 	}
 	
+	// Simulado 1 questão 2
 	public static Image simulatedTestQuestion2(Image image) {
 		try {
 			int w = (int) image.getWidth();
@@ -121,6 +123,38 @@ public class ImageProcess {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	// Simulado 1 questão 3
+	public static void simulatedTestQuestion3(Image image, int initialX, int finalX, int initialY, int finalY) {
+		try {
+
+			PixelReader pr = image.getPixelReader();
+			ArrayList<Color> selectedColors = new ArrayList<Color>();
+			Color color;
+			
+			for(int i=initialX; i<finalX; i++) {
+				for(int j=initialY; j<finalY; j++) {
+					color = pr.getColor(i, j);
+					if(i == initialX && j == initialY) {
+						selectedColors.add(color);
+					} else {
+						if(!selectedColors.contains(color)) {
+							selectedColors.add(color);
+						}
+					}
+				}
+			}
+			String txt = "";
+			for(Color c : selectedColors) {
+				txt += String.format("\nR: %d G: %d B: %d", (int)(c.getRed()*255), (int)(c.getGreen()*255), (int)(c.getBlue()*255));
+			}
+			
+			AlertMessage.showMsg("Info", "Cores selecionadas", txt, AlertType.INFORMATION);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}	
 	}
 	
 	public static Image equalizeHistogram(Image image) {

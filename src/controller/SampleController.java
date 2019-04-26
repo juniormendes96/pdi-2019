@@ -131,6 +131,7 @@ public class SampleController {
 		finalX = (int)evt.getX();
 		finalY = (int)evt.getY();
 		imageResult = ImageProcess.demarcate(firstImage, initialX, finalX, initialY, finalY);
+		ImageProcess.simulatedTestQuestion3(firstImage, initialX, finalX, initialY, finalY);
 		updateImageResult();
 	}
 
