@@ -93,6 +93,36 @@ public class ImageProcess {
 		}
 	}
 	
+	public static Image simulatedTestQuestion2(Image image) {
+		try {
+			int w = (int) image.getWidth();
+			int h = (int) image.getHeight();
+			
+			WritableImage wi = new WritableImage(w, h);
+			PixelReader pr = image.getPixelReader();
+			PixelWriter pw = wi.getPixelWriter();
+			
+			Color color;
+			
+			for(int i=0; i<w; i++) {
+				for(int j=0; j<h; j++) {
+					if(j <= h/2) {
+						color= pr.getColor(i, j);
+						pw.setColor(i, j, color);
+					} else {
+						color = pr.getColor(w-i-1, h-(j-h/2)-1);
+						pw.setColor(i, j, color);
+					}
+				}
+			}
+						
+			return wi;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static Image equalizeHistogram(Image image) {
 		int w = (int) image.getWidth();
 		int h = (int) image.getHeight();

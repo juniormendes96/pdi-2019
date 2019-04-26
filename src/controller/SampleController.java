@@ -85,6 +85,11 @@ public class SampleController {
 		updateImageResult();
 	}
 	
+	@FXML public void simulatedTestQuestion2() {
+		imageResult = ImageProcess.simulatedTestQuestion2(firstImage);
+		updateImageResult();
+	}
+	
 	@FXML public void equalizeHistogram() {
 		imageResult = ImageProcess.equalizeHistogram(firstImage);
 		updateImageResult();
