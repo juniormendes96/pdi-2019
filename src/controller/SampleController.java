@@ -34,63 +34,39 @@ import utils.AlertMessage;
 
 public class SampleController {
 	
-	@FXML
-	private ImageView imageViewFirstTab;
+	@FXML private ImageView imageViewFirstTab;
+	@FXML private ImageView imageViewSecondTab;
+	@FXML private ImageView imageViewResult;
 	
-	@FXML
-	private ImageView imageViewSecondTab;
+	@FXML private Label lblR;
+	@FXML private Label lblG;
+	@FXML private Label lblB;
 	
-	@FXML
-	private ImageView imageViewResult;
+	@FXML private Pane pnlColor;
 	
-	@FXML
-	private Label lblR;
+	@FXML private TextField txtR;
+	@FXML private TextField txtG;
+	@FXML private TextField txtB;
 	
-	@FXML
-	private Label lblG;
+	@FXML private Slider thresholdSlider;
 	
-	@FXML
-	private Label lblB;
+	@FXML private RadioButton radioCross;
 	
-	@FXML
-	private Pane pnlColor;
+	@FXML private RadioButton radioX;
+	@FXML private RadioButton radio3x3;
 	
-	@FXML
-	private TextField txtR;
+	@FXML private Slider percTransp;
 	
-	@FXML
-	private TextField txtG;
+	@FXML private ColorPicker colorPicker1;
+	@FXML private ColorPicker colorPicker2;
+	@FXML private ColorPicker colorPicker3;
 	
-	@FXML
-	private TextField txtB;
+	@FXML private Button btnChallenge2;
 	
-	@FXML
-	private Slider thresholdSlider;
+	@FXML private ColorPicker colorPickerQuestion1;
 	
-	@FXML
-	private RadioButton radioCross;
-	
-	@FXML
-	private RadioButton radioX;
-	
-	@FXML
-	private RadioButton radio3x3;
-	
-	@FXML
-	private Slider percTransp;
-	
-	@FXML
-	private ColorPicker colorPicker1;
-	
-	@FXML
-	private ColorPicker colorPicker2;
-	
-	@FXML
-	private ColorPicker colorPicker3;
-	
-	@FXML
-	private Button btnChallenge2;
-	
+	@FXML private TextField pixelDistanceQuestion1;
+		
 	private Image firstImage;
 	private Image secondImage;
 	private Image imageResult;
@@ -99,20 +75,22 @@ public class SampleController {
 	private int initialX, finalX, initialY, finalY;
 	
 	// Desafio Segmentação
-	@FXML
-	public void challenge2() {
+	@FXML public void challenge2() {
 		imageResult = ImageProcess.segmentate(firstImage, colorPicker1.getValue(), colorPicker2.getValue(), colorPicker3.getValue());
 		updateImageResult();
 	}
 	
-	@FXML
-	public void equalizeHistogram() {
+	@FXML public void simulatedTestQuestion1() {
+		imageResult = ImageProcess.simulatedTestQuestion1(firstImage, Integer.parseInt(pixelDistanceQuestion1.getText()), colorPickerQuestion1.getValue());
+		updateImageResult();
+	}
+	
+	@FXML public void equalizeHistogram() {
 		imageResult = ImageProcess.equalizeHistogram(firstImage);
 		updateImageResult();
 	}
 	
-	@FXML
-	public void openHistogramModal(ActionEvent event) {
+	@FXML public void openHistogramModal(ActionEvent event) {
 		try {
 			Stage stage = new Stage();
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HistogramModal.fxml"));
@@ -137,36 +115,31 @@ public class SampleController {
 		}
 	}
 	
-	@FXML
-	public void onMousePressed(MouseEvent evt) {
+	@FXML public void onMousePressed(MouseEvent evt) {
 		if(imageViewFirstTab.getImage() != null) {
 			initialX = (int)evt.getX();
 			initialY = (int)evt.getY();
 		}
 	}
 	
-	@FXML
-	public void onMouseReleased(MouseEvent evt) {
+	@FXML public void onMouseReleased(MouseEvent evt) {
 		finalX = (int)evt.getX();
 		finalY = (int)evt.getY();
 		imageResult = ImageProcess.demarcate(firstImage, initialX, finalX, initialY, finalY);
 		updateImageResult();
 	}
 
-	@FXML
-	public void addition() {
+	@FXML public void addition() {
 		imageResult = ImageProcess.calcAddition(firstImage, secondImage, percTransp.getValue()/100, (100-percTransp.getValue())/100);
 		updateImageResult();
 	}
 	
-	@FXML
-	public void subtraction() {
+	@FXML public void subtraction() {
 		imageResult = ImageProcess.calcSubtraction(firstImage, secondImage);
 		updateImageResult();
 	}
 	
-	@FXML
-	public void reduceNoise() {
+	@FXML public void reduceNoise() {
 		if(radio3x3.isSelected()) {
 			imageResult = ImageProcess.reduceNoise(firstImage, NeighborEnum.NEIGHBOR_3X3);
 		} else if(radioCross.isSelected()) {
@@ -177,14 +150,12 @@ public class SampleController {
 		updateImageResult();
 	}
 	
-	@FXML
-	public void challenge1() {
+	@FXML public void challenge1() {
 		imageResult = ImageProcess.challenge1(firstImage);
 		updateImageResult();
 	}
 	
-	@FXML
-	public void negative() {
+	@FXML public void negative() {
 		if(isDemarcated()) {
 			imageResult = ImageProcess.calcNegative(firstImage, initialX, finalX, initialY, finalY);
 		} else {
@@ -193,8 +164,7 @@ public class SampleController {
 		updateImageResult();
 	}
 	
-	@FXML
-	public void thresholding() {
+	@FXML public void thresholding() {
 		if(isDemarcated()) {
 			imageResult = ImageProcess.calcThresholding(firstImage, thresholdSlider.getValue(), initialX, finalX, initialY, finalY);
 		} else {
@@ -203,8 +173,7 @@ public class SampleController {
 		updateImageResult();
 	}
 	
-	@FXML
-	public void grayScaleAverage() {
+	@FXML public void grayScaleAverage() {
 		if(isDemarcated()) {
 			imageResult = ImageProcess.calcGrayScale(firstImage, initialX, finalX, initialY, finalY);
 		} else {
@@ -213,8 +182,7 @@ public class SampleController {
 		updateImageResult();
 	}
 	
-	@FXML
-	private void weightedAverage() {
+	@FXML private void weightedAverage() {
 		int r = Integer.parseInt(txtR.getText());
 		int g = Integer.parseInt(txtG.getText());
 		int b = Integer.parseInt(txtB.getText());
@@ -231,15 +199,13 @@ public class SampleController {
 		}
 	}
 	
-	@FXML
-	public void updateImageResult() {
+	@FXML public void updateImageResult() {
 		imageViewResult.setImage(imageResult);
 		imageViewResult.setFitWidth(imageResult.getWidth());
 		imageViewResult.setFitHeight(imageResult.getHeight());
 	}
 	
-	@FXML
-	public void openFirstImage() {
+	@FXML public void openFirstImage() {
 		f = selectImage();
 		if(f != null) {
 			firstImage = new Image(f.toURI().toString());
@@ -249,8 +215,7 @@ public class SampleController {
 		}
 	}
 	
-	@FXML
-	public void openSecondImage() {
+	@FXML public void openSecondImage() {
 		f = selectImage();
 		if(f != null) {
 			secondImage = new Image(f.toURI().toString());
@@ -279,8 +244,7 @@ public class SampleController {
 	   return null;
 	}
 	
-	@FXML
-	public void rasterImg(MouseEvent evt) {
+	@FXML public void rasterImg(MouseEvent evt) {
 		ImageView iv = (ImageView)evt.getTarget();
 		if(iv.getImage() != null) {
 			verifyColor(iv.getImage(), (int)evt.getX(), (int)evt.getY());
@@ -299,8 +263,7 @@ public class SampleController {
 		}
 	}
 	
-	@FXML
-	public void save(){
+	@FXML public void save(){
 		if (firstImage != null){
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.getExtensionFilters().add(

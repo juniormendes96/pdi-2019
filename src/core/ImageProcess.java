@@ -65,6 +65,34 @@ public class ImageProcess {
 		
 	}
 	
+	public static Image simulatedTestQuestion1(Image image, int pixelDistance, Color pixelColor) {
+		try {
+			int w = (int) image.getWidth();
+			int h = (int) image.getHeight();
+			
+			WritableImage wi = new WritableImage(w, h);
+			PixelReader pr = image.getPixelReader();
+			PixelWriter pw = wi.getPixelWriter();
+			
+			Color originalColor;
+			
+			for(int i=0; i<w; i++) {
+				for(int j=0; j<h; j++) {
+					originalColor = pr.getColor(i, j);
+					if(i % pixelDistance == 0 && i != 0) {
+						pw.setColor(i, j, pixelColor);
+					} else {
+						pw.setColor(i, j, originalColor);
+					}
+				}
+			}
+			return wi;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static Image equalizeHistogram(Image image) {
 		int w = (int) image.getWidth();
 		int h = (int) image.getHeight();
