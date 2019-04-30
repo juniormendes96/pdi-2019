@@ -90,6 +90,16 @@ public class SampleController {
 		updateImageResult();
 	}
 	
+	@FXML public void rotateRight() {
+		imageResult = ImageProcess.rotateRight(firstImage);
+		updateImageResult();
+	}
+	
+	@FXML public void rotateLeft() {
+		imageResult = ImageProcess.rotateLeft(firstImage);
+		updateImageResult();
+	}
+	
 	@FXML public void equalizeHistogram() {
 		imageResult = ImageProcess.equalizeHistogram(firstImage);
 		updateImageResult();

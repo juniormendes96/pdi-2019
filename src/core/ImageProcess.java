@@ -157,6 +157,54 @@ public class ImageProcess {
 		}	
 	}
 	
+	public static Image rotateRight(Image image) {
+		try {
+			int w = (int) image.getWidth();
+			int h = (int) image.getHeight();
+			
+			WritableImage wi = new WritableImage(h, w);
+			PixelReader pr = image.getPixelReader();
+			PixelWriter pw = wi.getPixelWriter();
+			Color color;
+			
+			for(int i=0; i<w; i++) {
+				for(int j=h-1; j>=0; j--) {
+					color = pr.getColor(i, j);
+					pw.setColor((h-1)-j, i, color);
+				}
+			}
+			return wi;	
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Image rotateLeft(Image image) {
+		try {
+			int w = (int) image.getWidth();
+			int h = (int) image.getHeight();
+			
+			WritableImage wi = new WritableImage(h, w);
+			PixelReader pr = image.getPixelReader();
+			PixelWriter pw = wi.getPixelWriter();
+			Color color;
+			
+			for(int i=w-1; i>=0; i--) {
+				for(int j=0; j<h; j++) {
+					color = pr.getColor(i, j);
+					pw.setColor(j, (w-1)-i, color);
+				}
+			}
+			return wi;	
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static Image equalizeHistogram(Image image) {
 		int w = (int) image.getWidth();
 		int h = (int) image.getHeight();
