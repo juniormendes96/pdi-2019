@@ -264,6 +264,7 @@ public class ImageProcess {
 		
 		int w = (int)image.getWidth();
 		int h = (int)image.getHeight();
+		channel = Character.toUpperCase(channel);
 		
 		PixelReader pr = image.getPixelReader();
 		
@@ -271,15 +272,12 @@ public class ImageProcess {
 			for(int j=0; j<h; j++) {
 				Color color = pr.getColor(i, j);
 				switch(channel) {
-					case 'r':
 					case 'R':
 						qt[(int)(color.getRed()*255)]++;	
 						break;
-					case 'g':
 					case 'G':
 						qt[(int)(color.getGreen()*255)]++;
 						break;
-					case 'b':
 					case 'B':
 						qt[(int)(color.getBlue()*255)]++;
 						break;
