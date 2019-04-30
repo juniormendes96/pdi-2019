@@ -528,14 +528,17 @@ public class ImageProcess {
 		List<Double> list = new ArrayList<Double>();
 
 		if (PixelEnum.RED.equals(pixelType)) {
-			pixelsList.stream().forEach(pixel -> list.add(pixel.getRed()));
-
+			for(Pixel pixel : pixelsList) {
+				list.add(pixel.getRed());
+			}
 		} else if (PixelEnum.GREEN.equals(pixelType)) {
-			pixelsList.stream().forEach(pixel -> list.add(pixel.getGreen()));
-
+			for(Pixel pixel : pixelsList) {
+				list.add(pixel.getGreen());
+			}
 		} else if (PixelEnum.BLUE.equals(pixelType)) {
-			pixelsList.stream().forEach(pixel -> list.add(pixel.getBlue()));
-
+			for(Pixel pixel : pixelsList) {
+				list.add(pixel.getBlue());
+			}
 		}
 
 		Collections.sort(list);
