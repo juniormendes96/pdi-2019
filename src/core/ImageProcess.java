@@ -65,6 +65,119 @@ public class ImageProcess {
 		
 	}
 	
+	// Prova 1 questão 1
+	public static Image test1Question1(Image image, int qtColumns) {
+		try {
+			int w = (int)image.getWidth();
+			int h = (int)image.getHeight();
+			
+			PixelReader pr = image.getPixelReader();
+			WritableImage wi = new WritableImage(w, h);
+			PixelWriter pw = wi.getPixelWriter();
+			
+			Color originalColor;
+			double average;
+			
+			boolean originalColorTurn = false;
+			int num = w / qtColumns;
+			int separator = w / qtColumns;
+			
+			for(int i=0; i<w; i++) {
+				for(int j=0; j<h; j++) {
+					originalColor = pr.getColor(i, j);
+					if(i == separator) {
+						originalColorTurn = !originalColorTurn;
+						separator += num;
+					}
+					if(originalColorTurn) {
+						pw.setColor(i, j, originalColor);
+					} else {
+						average = (originalColor.getRed()+originalColor.getGreen()+originalColor.getBlue())/3;
+						Color newColor = new Color(average, average, average, originalColor.getOpacity());
+						pw.setColor(i, j, newColor);
+					}
+				}
+			}
+			return wi;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	// Prova 1 questão 2 
+	public static Image test1Question2(Image image, int initialX, int finalX, int initialY, int finalY) {
+		try {
+			
+			int w = (int) image.getWidth();
+			int h = (int) image.getHeight();
+			
+			WritableImage wi = new WritableImage(w, h);
+			PixelReader pr = image.getPixelReader();
+			PixelWriter pw = wi.getPixelWriter();
+			
+			Color color;
+			
+			if(isDemarcated(initialX, finalX, initialY, finalY)) {
+				for(int i=0; i<w; i++) {
+					for(int j=0; j<h; j++) {
+						if((i <= finalX && i >= initialX) && (j <= finalY && j >= initialY)) {
+							color = pr.getColor(finalX - (i + finalX - initialX - finalX), finalY - (j + finalY - initialY - finalY));
+						} else {
+							color = pr.getColor(i, j);
+						}
+						pw.setColor(i, j, color);
+					}
+				}
+			} else {
+				AlertMessage.showMsg("Erro", "Demarcação", "Você deve demarcar a imagem", AlertType.INFORMATION);
+				return null;
+			}
+			return wi; 
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	// Prova 1 questão 3
+	public static void test1Question3(Image image) {
+		try {
+	
+			int w = (int) image.getWidth();
+			int h = (int) image.getHeight();
+			
+			PixelReader pr = image.getPixelReader();
+			int columnsWithMoreThanTwoBlackPixels = 0;
+			int blackPixelsCount;
+			
+			Color color;
+			
+			for(int i=0; i<w; i++) {
+				blackPixelsCount = 0;
+				for(int j=0; j<h; j++) {
+					color = pr.getColor(i, j);
+					if(color.getRed() == 0 && color.getGreen() == 0 && color.getBlue() == 0) {
+						blackPixelsCount++;
+					}
+				}
+				if(blackPixelsCount > 2) {
+					columnsWithMoreThanTwoBlackPixels++;
+				}
+			}
+			
+			if(columnsWithMoreThanTwoBlackPixels > 2) {
+				AlertMessage.showMsg("Info", "Retângulo", "Retângulo preenchido", AlertType.INFORMATION);
+			} else {
+				AlertMessage.showMsg("Info", "Retângulo", "Retângulo vazio", AlertType.INFORMATION);
+			}
+			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	// Simulado 1 questão 1
 	public static Image simulatedTestQuestion1(Image image, int pixelDistance, Color pixelColor) {
 		try {

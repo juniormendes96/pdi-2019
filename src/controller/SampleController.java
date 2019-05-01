@@ -74,10 +74,29 @@ public class SampleController {
 	
 	private int initialX, finalX, initialY, finalY;
 	
+	@FXML private TextField qtColumns;
+	
 	// Desafio Segmentação
 	@FXML public void challenge2() {
 		imageResult = ImageProcess.segmentate(firstImage, colorPicker1.getValue(), colorPicker2.getValue(), colorPicker3.getValue());
 		updateImageResult();
+	}
+	
+	// Prova 1 questão 1
+	@FXML public void test1Question1() {
+		imageResult = ImageProcess.test1Question1(firstImage, Integer.parseInt(qtColumns.getText()));
+		updateImageResult();
+	}
+	
+	// Prova 1 questão 2
+	@FXML public void test1Question2() {
+		imageResult = ImageProcess.test1Question2(firstImage, initialX, finalX, initialY, finalY);
+		updateImageResult();
+	}
+	
+	// Prova 1 questão 3
+	@FXML public void test1Question3() {
+		ImageProcess.test1Question3(firstImage);
 	}
 	
 	@FXML public void simulatedTestQuestion1() {
@@ -141,7 +160,7 @@ public class SampleController {
 		finalX = (int)evt.getX();
 		finalY = (int)evt.getY();
 		imageResult = ImageProcess.demarcate(firstImage, initialX, finalX, initialY, finalY);
-		ImageProcess.simulatedTestQuestion3(firstImage, initialX, finalX, initialY, finalY);
+		//ImageProcess.simulatedTestQuestion3(firstImage, initialX, finalX, initialY, finalY);
 		updateImageResult();
 	}
 
