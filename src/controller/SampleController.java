@@ -66,15 +66,18 @@ public class SampleController {
 	@FXML private ColorPicker colorPickerQuestion1;
 	
 	@FXML private TextField pixelDistanceQuestion1;
+	
+	@FXML private TextField qtColumns;
 		
 	private Image firstImage;
 	private Image secondImage;
 	private Image imageResult;
+	private Image originalImage;
+	
 	private File f; 
 	
 	private int initialX, finalX, initialY, finalY;
 	
-	@FXML private TextField qtColumns;
 	
 	// Desafio Segmentação
 	@FXML public void challenge2() {
@@ -159,9 +162,18 @@ public class SampleController {
 	@FXML public void onMouseReleased(MouseEvent evt) {
 		finalX = (int)evt.getX();
 		finalY = (int)evt.getY();
-		imageResult = ImageProcess.demarcate(firstImage, initialX, finalX, initialY, finalY);
+		firstImage = ImageProcess.demarcate(originalImage, initialX, finalX, initialY, finalY);
 		//ImageProcess.simulatedTestQuestion3(firstImage, initialX, finalX, initialY, finalY);
-		updateImageResult();
+		updateFirstImage();
+	}
+	
+	@FXML public void removeDemarcation() {
+		firstImage = originalImage;
+		initialX = 0;
+		initialY = 0;
+		finalX = 0;
+		finalY = 0;
+		updateFirstImage();
 	}
 
 	@FXML public void addition() {
@@ -192,27 +204,27 @@ public class SampleController {
 	
 	@FXML public void negative() {
 		if(isDemarcated()) {
-			imageResult = ImageProcess.calcNegative(firstImage, initialX, finalX, initialY, finalY);
+			imageResult = ImageProcess.calcNegative(originalImage, initialX, finalX, initialY, finalY);
 		} else {
-			imageResult = ImageProcess.calcNegative(firstImage, 0, 0, 0, 0);
+			imageResult = ImageProcess.calcNegative(originalImage, 0, 0, 0, 0);
 		}
 		updateImageResult();
 	}
 	
 	@FXML public void thresholding() {
 		if(isDemarcated()) {
-			imageResult = ImageProcess.calcThresholding(firstImage, thresholdSlider.getValue(), initialX, finalX, initialY, finalY);
+			imageResult = ImageProcess.calcThresholding(originalImage, thresholdSlider.getValue(), initialX, finalX, initialY, finalY);
 		} else {
-			imageResult = ImageProcess.calcThresholding(firstImage, thresholdSlider.getValue(), 0, 0, 0, 0);
+			imageResult = ImageProcess.calcThresholding(originalImage, thresholdSlider.getValue(), 0, 0, 0, 0);
 		}
 		updateImageResult();
 	}
 	
 	@FXML public void grayScaleAverage() {
 		if(isDemarcated()) {
-			imageResult = ImageProcess.calcGrayScale(firstImage, initialX, finalX, initialY, finalY);
+			imageResult = ImageProcess.calcGrayScale(originalImage, initialX, finalX, initialY, finalY);
 		} else {
-			imageResult = ImageProcess.calcGrayScale(firstImage, 0, 0, 0, 0);
+			imageResult = ImageProcess.calcGrayScale(originalImage, 0, 0, 0, 0);
 		}
 		updateImageResult();
 	}
@@ -226,9 +238,9 @@ public class SampleController {
             AlertMessage.showMsg("Escala de Cinza", "Erro", "A soma deve ser menor ou igual a 10.", AlertType.ERROR);
 		} else {
 			if(isDemarcated()) {
-				imageResult = ImageProcess.calcWeightedAverage(firstImage, r, g, b, initialX, finalX, initialY, finalY);
+				imageResult = ImageProcess.calcWeightedAverage(originalImage, r, g, b, initialX, finalX, initialY, finalY);
 			} else {
-				imageResult = ImageProcess.calcWeightedAverage(firstImage, r, g, b, 0, 0, 0, 0);
+				imageResult = ImageProcess.calcWeightedAverage(originalImage, r, g, b, 0, 0, 0, 0);
 			}
 			updateImageResult();
 		}
@@ -240,6 +252,14 @@ public class SampleController {
 		imageViewResult.setFitHeight(imageResult.getHeight());
 	}
 	
+	@FXML public void updateFirstImage() {
+		if(firstImage != null) {
+			imageViewFirstTab.setImage(firstImage);
+			imageViewFirstTab.setFitWidth(firstImage.getWidth());
+			imageViewFirstTab.setFitHeight(firstImage.getHeight());
+		}
+	}
+	
 	@FXML public void openFirstImage() {
 		f = selectImage();
 		if(f != null) {
@@ -247,7 +267,9 @@ public class SampleController {
 			imageViewFirstTab.setImage(firstImage);
 			imageViewFirstTab.setFitWidth(firstImage.getWidth());
 			imageViewFirstTab.setFitHeight(firstImage.getHeight());
+			originalImage = firstImage;
 		}
+		
 	}
 	
 	@FXML public void openSecondImage() {
