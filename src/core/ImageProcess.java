@@ -1,11 +1,22 @@
 package core;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
 import enums.NeighborEnum;
 import enums.PixelEnum;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert.AlertType;
@@ -19,6 +30,51 @@ import utils.AlertMessage;
 import utils.ColorUtils;
 
 public class ImageProcess {	
+	
+	// Erosão
+	public static Image erode() {
+		try {
+			 System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
+	         Mat source = Imgcodecs.imread("images/image.png");
+	
+	         int erosion_size = 5;
+	         
+	         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new  Size(2*erosion_size + 1, 2*erosion_size+1));
+	         Imgproc.erode(source, source, element);
+	         Imgcodecs.imwrite("images/image.png", source);
+	         
+	         BufferedImage bi = ImageIO.read(new File("images/image.png"));
+	         Image image = SwingFXUtils.toFXImage(bi, null);
+	         
+	         return image;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
+	// Dilatação
+	public static Image dilate() {
+		try {
+			 System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
+	         Mat source = Imgcodecs.imread("images/image.png");
+	
+	         int dilation_size = 5;
+	         
+	         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new  Size(2*dilation_size + 1, 2*dilation_size+1));
+	         Imgproc.dilate(source, source, element);
+	         Imgcodecs.imwrite("images/image.png", source);
+	         
+	         BufferedImage bi = ImageIO.read(new File("images/image.png"));
+	         Image image = SwingFXUtils.toFXImage(bi, null);
+	         
+	         return image;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	// Desafio Segmentação
 	public static Image segmentate(Image image, Color color1, Color color2, Color color3) {

@@ -78,6 +78,20 @@ public class SampleController {
 	
 	private int initialX, finalX, initialY, finalY;
 	
+
+	@FXML public void erode() {
+		this.saveToImagesFolder();
+		imageResult = ImageProcess.erode();
+		updateImageResult();
+		this.deleteFilesFromFolder(new File("images"));
+	}
+	
+	@FXML public void dilate() {
+		this.saveToImagesFolder();
+		imageResult = ImageProcess.dilate();
+		updateImageResult();
+		this.deleteFilesFromFolder(new File("images"));
+	}
 	
 	// Desafio Segmentação
 	@FXML public void challenge2() {
@@ -317,6 +331,22 @@ public class SampleController {
 			pnlColor.setStyle("-fx-background-color: RGB(" + (int)(color.getRed()*255)+","+(int)(color.getGreen()*255)+","+(int)(color.getBlue()*255)+")");
 		} catch (Exception e) {
 			//e.printStackTrace();
+		}
+	}
+	
+	public void deleteFilesFromFolder(File folder) {
+		for(File file : folder.listFiles()) {
+			file.delete();
+		}
+	}
+	
+	public void saveToImagesFolder() {
+		File outputFile = new File("images/image.png");
+		BufferedImage bi = SwingFXUtils.fromFXImage(firstImage, null);
+		try {
+			ImageIO.write(bi, "PNG", outputFile);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
