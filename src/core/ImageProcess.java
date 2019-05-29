@@ -28,13 +28,8 @@ import utils.OpenCVUtils;
 
 public class ImageProcess {	
 	
-	public static void loadOpenCV() {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	}
-	
 	public static Image processLaplaceBorderDetection(Image image) {
 		try {
-			loadOpenCV();
 			int kernel_size = 3;
 	        int scale = 1;
 	        int delta = 0;
@@ -65,7 +60,6 @@ public class ImageProcess {
 	
 	public static Image processSobelBorderDetection(Image image) {
 		try {
-			loadOpenCV();
 	        Mat grad = new Mat();
 	        Mat src_gray = new Mat();
 	        int scale = 1;
@@ -96,7 +90,6 @@ public class ImageProcess {
 	
 	public static Image processCannyBorderDetection(Image image, double threshold) {
 		try {
-			loadOpenCV();
 			Mat src = OpenCVUtils.image2Mat(image);
 			Mat srcBlur = new Mat();
 			Mat detectedEdges = new Mat();
@@ -120,7 +113,6 @@ public class ImageProcess {
 	// Erosão
 	public static Image erode(Image image) {
 		try {
-			 loadOpenCV();
 	         Mat source = OpenCVUtils.image2Mat(image);
 	         int erosion_size = 5;
 	         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new  Size(2*erosion_size + 1, 2*erosion_size+1));
@@ -136,7 +128,6 @@ public class ImageProcess {
 	// Dilatação
 	public static Image dilate(Image image) {
 		try {
-			 loadOpenCV();
 	         Mat source = OpenCVUtils.image2Mat(image);
 	         int dilation_size = 5;
 	         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new  Size(2*dilation_size + 1, 2*dilation_size+1));
