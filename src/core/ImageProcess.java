@@ -9,7 +9,9 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -31,10 +33,117 @@ import utils.ColorUtils;
 
 public class ImageProcess {	
 	
+	public static void loadOpenCV() {
+		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
+	}
+	
+	public static Image processLaplaceBorderDetection() {
+		try {
+			loadOpenCV();
+			int kernel_size = 3;
+	        int scale = 1;
+	        int delta = 0;
+	        int ddepth = CvType.CV_16S;
+	        
+	        Mat src = Imgcodecs.imread("images/image.png");
+	        Mat src_gray = new Mat();
+	        Mat dst = new Mat();
+	        Mat abs_dst = new Mat();
+	        
+	        // Reduce noise by blurring with a Gaussian filter ( kernel size = 3 )
+	        Imgproc.GaussianBlur( src, src, new Size(3, 3), 0, 0, Core.BORDER_DEFAULT );
+	        
+	        // Convert the image to grayscale
+	        Imgproc.cvtColor( src, src_gray, Imgproc.COLOR_RGB2GRAY );
+	        
+	        Imgproc.Laplacian( src_gray, dst, ddepth, kernel_size, scale, delta, Core.BORDER_DEFAULT );
+	        
+	        // converting back to CV_8U
+	        Core.convertScaleAbs( dst, abs_dst );
+	        
+	        Imgcodecs.imwrite("images/image.png", abs_dst);
+	        
+	        BufferedImage bi = ImageIO.read(new File("images/image.png"));
+	        Image image = SwingFXUtils.toFXImage(bi, null);
+	         
+	        return image;
+	        
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Image processSobelBorderDetection() {
+		try {
+			loadOpenCV();
+	        Mat grad = new Mat();
+	        Mat src_gray = new Mat();
+	        int scale = 1;
+	        int delta = 0;
+	        int ddepth = CvType.CV_16S;
+
+	        Mat src = Imgcodecs.imread("images/image.png");
+	        Imgproc.GaussianBlur( src, src, new Size(3, 3), 0, 0, Core.BORDER_DEFAULT );
+	        Imgproc.cvtColor( src, src_gray, Imgproc.COLOR_RGB2GRAY );
+	        
+	        Mat grad_x = new Mat(), grad_y = new Mat();
+	        Mat abs_grad_x = new Mat(), abs_grad_y = new Mat();
+	        
+	        //Imgproc.Scharr( src_gray, grad_x, ddepth, 1, 0, scale, delta, Core.BORDER_DEFAULT );
+	        Imgproc.Sobel( src_gray, grad_x, ddepth, 1, 0, 3, scale, delta, Core.BORDER_DEFAULT );
+	        
+	        //Imgproc.Scharr( src_gray, grad_y, ddepth, 0, 1, scale, delta, Core.BORDER_DEFAULT );
+	        Imgproc.Sobel( src_gray, grad_y, ddepth, 0, 1, 3, scale, delta, Core.BORDER_DEFAULT );
+	        
+	        // converting back to CV_8U
+	        Core.convertScaleAbs( grad_x, abs_grad_x );
+	        Core.convertScaleAbs( grad_y, abs_grad_y );
+	        Core.addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad );
+	        
+	        Imgcodecs.imwrite("images/image.png", grad);
+	        
+	        BufferedImage bi = ImageIO.read(new File("images/image.png"));
+	        Image image = SwingFXUtils.toFXImage(bi, null);
+	         
+	        return image;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Image processCannyBorderDetection(double threshold) {
+		try {
+			loadOpenCV();
+			Mat src = Imgcodecs.imread("images/image.png");
+			Mat srcBlur = new Mat();
+			Mat detectedEdges = new Mat();
+			Size BLUR_SIZE = new Size(3,3);
+			int RATIO = 3;
+			int KERNEL_SIZE = 3;
+			
+			Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2GRAY);
+			Imgproc.blur(src, srcBlur, BLUR_SIZE);
+	        Imgproc.Canny(srcBlur, detectedEdges, threshold, threshold * RATIO, KERNEL_SIZE, false);
+	        Mat dst = new Mat(src.size(), CvType.CV_8UC3, Scalar.all(0));
+	        src.copyTo(dst, detectedEdges);
+	        Imgcodecs.imwrite("images/image.png", dst);
+	        
+	        BufferedImage bi = ImageIO.read(new File("images/image.png"));
+	        Image image = SwingFXUtils.toFXImage(bi, null);
+	         
+	        return image;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	// Erosão
 	public static Image erode() {
 		try {
-			 System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
+			 loadOpenCV();
 	         Mat source = Imgcodecs.imread("images/image.png");
 	
 	         int erosion_size = 5;
@@ -57,7 +166,7 @@ public class ImageProcess {
 	// Dilatação
 	public static Image dilate() {
 		try {
-			 System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
+			 loadOpenCV();
 	         Mat source = Imgcodecs.imread("images/image.png");
 	
 	         int dilation_size = 5;
@@ -970,6 +1079,5 @@ public class ImageProcess {
 		}
 		return false;
 	}
-
 
 }

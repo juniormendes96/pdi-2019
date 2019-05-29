@@ -68,6 +68,8 @@ public class SampleController {
 	@FXML private TextField pixelDistanceQuestion1;
 	
 	@FXML private TextField qtColumns;
+	
+	@FXML private Slider cannyThreshold;
 		
 	private Image firstImage;
 	private Image secondImage;
@@ -78,7 +80,27 @@ public class SampleController {
 	
 	private int initialX, finalX, initialY, finalY;
 	
-
+	@FXML public void laplace() {
+		this.saveToImagesFolder();
+		imageResult = ImageProcess.processLaplaceBorderDetection();
+		updateImageResult();
+		this.deleteFilesFromFolder(new File("images"));
+	}
+	
+	@FXML public void sobel() {
+		this.saveToImagesFolder();
+		imageResult = ImageProcess.processSobelBorderDetection();
+		updateImageResult();
+		this.deleteFilesFromFolder(new File("images"));
+	}
+	
+	@FXML public void canny() {
+		this.saveToImagesFolder();
+		imageResult = ImageProcess.processCannyBorderDetection(cannyThreshold.getValue());
+		updateImageResult();
+		this.deleteFilesFromFolder(new File("images"));
+	}
+	
 	@FXML public void erode() {
 		this.saveToImagesFolder();
 		imageResult = ImageProcess.erode();

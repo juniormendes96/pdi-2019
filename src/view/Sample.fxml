@@ -191,6 +191,20 @@
                   </AnchorPane>
               </content>
             </TitledPane>
+            <TitledPane animated="false" text="Detecção de Bordas">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="137.0" layoutY="9.0" mnemonicParsing="false" onAction="#canny" text="Canny" />
+                        <Slider fx:id="cannyThreshold" layoutX="14.0" layoutY="14.0" prefHeight="14.0" prefWidth="116.0" />
+                        <Separator layoutY="50.0" prefWidth="200.0" />
+                        <Button layoutX="77.0" layoutY="59.0" mnemonicParsing="false" onAction="#sobel" text="Sobel" />
+                        <Separator layoutX="14.0" layoutY="91.0" prefWidth="200.0" />
+                        <Button layoutX="72.0" layoutY="99.0" mnemonicParsing="false" onAction="#laplace" text="Laplace" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </TitledPane>
         </panes>
       </Accordion>
    </left>
