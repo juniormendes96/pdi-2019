@@ -352,10 +352,10 @@ public class SampleController {
 			fileChooser.getExtensionFilters().add(
 					new FileChooser.ExtensionFilter("Imagem", "*.png")); 	
 			fileChooser.setInitialDirectory(new 
-					File("C:\\Users\\vilma\\eclipse-workspace\\Pdi-2019\\images"));
+					File("C:\\Users\\Junior\\eclipse-workspace\\Pdi-2019\\images"));
 			File file = fileChooser.showSaveDialog(null);
 			if (file !=null){
-				BufferedImage bImg = SwingFXUtils.fromFXImage(firstImage, null);
+				BufferedImage bImg = SwingFXUtils.fromFXImage(imageResult, null);
 				try {
 					ImageIO.write(bImg, "PNG", file);
 				} catch (IOException e) {
