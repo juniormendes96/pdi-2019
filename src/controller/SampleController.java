@@ -180,6 +180,7 @@ public class SampleController {
 		imageResult = ImageProcess.equalizeHistogram(firstImage);
 		updateImageResult();
 		tabPane.getSelectionModel().select(tabResult);
+		filterHistoryItems.add(new FilterHistoryModel("Equalização histograma"));
 	}
 	
 	@FXML public void openHistogramModal(ActionEvent event) {
