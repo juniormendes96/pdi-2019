@@ -4,6 +4,8 @@ package controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -32,6 +34,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.FilterHistoryModel;
 import utils.AlertMessage;
 
 public class SampleController {
@@ -86,34 +89,41 @@ public class SampleController {
 	
 	private int initialX, finalX, initialY, finalY;
 	
+	private List<FilterHistoryModel> filterHistoryItems = new ArrayList<>();
+		
 	@FXML public void laplace() {
 		imageResult = ImageProcess.processLaplaceBorderDetection(firstImage);
 		updateImageResult();
 		tabPane.getSelectionModel().select(tabResult);
+		filterHistoryItems.add(new FilterHistoryModel("Laplace"));
 	}
 	
 	@FXML public void sobel() {
 		imageResult = ImageProcess.processSobelBorderDetection(firstImage);
 		updateImageResult();
 		tabPane.getSelectionModel().select(tabResult);
+		filterHistoryItems.add(new FilterHistoryModel("Sobel"));
 	}
 	
 	@FXML public void canny() {
 		imageResult = ImageProcess.processCannyBorderDetection(firstImage, cannyThreshold.getValue());
 		updateImageResult();
 		tabPane.getSelectionModel().select(tabResult);
+		filterHistoryItems.add(new FilterHistoryModel("Canny", "Valor threshold: " + cannyThreshold.getValue()));
 	}
 	
 	@FXML public void erode() {
 		imageResult = ImageProcess.erode(firstImage);
 		updateImageResult();
 		tabPane.getSelectionModel().select(tabResult);
+		filterHistoryItems.add(new FilterHistoryModel("Erosão"));
 	}
 	
 	@FXML public void dilate() {
 		imageResult = ImageProcess.dilate(firstImage);
 		updateImageResult();
 		tabPane.getSelectionModel().select(tabResult);
+		filterHistoryItems.add(new FilterHistoryModel("Dilatação"));
 	}
 	
 	// Desafio Segmentação
@@ -225,21 +235,28 @@ public class SampleController {
 		imageResult = ImageProcess.calcAddition(firstImage, secondImage, percTransp.getValue()/100, (100-percTransp.getValue())/100);
 		updateImageResult();
 		tabPane.getSelectionModel().select(tabResult);
+		filterHistoryItems.add(new FilterHistoryModel("Adição", 
+				String.format("Perc transp. img 1: %f Perc transp. img 2: %f", 
+						percTransp.getValue()/100, (100-percTransp.getValue()/100))));
 	}
 	
 	@FXML public void subtraction() {
 		imageResult = ImageProcess.calcSubtraction(firstImage, secondImage);
 		updateImageResult();
 		tabPane.getSelectionModel().select(tabResult);
+		filterHistoryItems.add(new FilterHistoryModel("Subtração"));
 	}
 	
 	@FXML public void reduceNoise() {
 		if(radio3x3.isSelected()) {
 			imageResult = ImageProcess.reduceNoise(firstImage, NeighborEnum.NEIGHBOR_3X3);
+			filterHistoryItems.add(new FilterHistoryModel("Redução de ruído", "3x3"));
 		} else if(radioCross.isSelected()) {
 			imageResult = ImageProcess.reduceNoise(firstImage, NeighborEnum.NEIGHBOR_CROSS);
+			filterHistoryItems.add(new FilterHistoryModel("Redução de ruído", "Cruz"));
 		} else if(radioX.isSelected()) {
 			imageResult = ImageProcess.reduceNoise(firstImage, NeighborEnum.NEIGHBOR_X);
+			filterHistoryItems.add(new FilterHistoryModel("Redução de ruído", "X"));
 		}
 		updateImageResult();
 	}
@@ -257,6 +274,7 @@ public class SampleController {
 			imageResult = ImageProcess.calcNegative(originalImage, 0, 0, 0, 0);
 		}
 		updateImageResult();
+		filterHistoryItems.add(new FilterHistoryModel("Negativa"));
 		tabPane.getSelectionModel().select(tabResult);
 	}
 	
@@ -267,6 +285,7 @@ public class SampleController {
 			imageResult = ImageProcess.calcThresholding(originalImage, thresholdSlider.getValue(), 0, 0, 0, 0);
 		}
 		updateImageResult();
+		filterHistoryItems.add(new FilterHistoryModel("Limiarização", String.format("Valor: %f", thresholdSlider.getValue())));
 		tabPane.getSelectionModel().select(tabResult);
 	}
 	
@@ -277,6 +296,7 @@ public class SampleController {
 			imageResult = ImageProcess.calcGrayScale(originalImage, 0, 0, 0, 0);
 		}
 		updateImageResult();
+		filterHistoryItems.add(new FilterHistoryModel("Escala de cinza"));
 		tabPane.getSelectionModel().select(tabResult);
 	}
 	
@@ -294,6 +314,7 @@ public class SampleController {
 				imageResult = ImageProcess.calcWeightedAverage(originalImage, r, g, b, 0, 0, 0, 0);
 			}
 			updateImageResult();
+			filterHistoryItems.add(new FilterHistoryModel("Média ponderada", String.format("R: %d G: %d B: %d", r, g, b)));
 			tabPane.getSelectionModel().select(tabResult);
 		}
 	}
@@ -401,6 +422,23 @@ public class SampleController {
 		firstImage = imageResult;
 		originalImage = imageResult;
 		updateFirstImage();
+	}
+	
+	public void openFilterHistoryModal() {
+		try {
+			Stage stage = new Stage();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/FilterHistoryModal.fxml"));
+			Parent root = loader.load();
+			
+			FilterHistoryController controller = (FilterHistoryController)loader.getController();
+			if(!filterHistoryItems.isEmpty()) controller.addItems(filterHistoryItems);
+			
+			stage.setScene(new Scene(root));
+			stage.setTitle("Histórico");
+			stage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean isDemarcated() {
