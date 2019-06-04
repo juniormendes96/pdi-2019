@@ -209,7 +209,7 @@
       </Accordion>
    </left>
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Imagem 1">
                <content>
@@ -260,7 +260,7 @@
                   </BorderPane>
                </content>
           </Tab>
-            <Tab text="Resultado">
+            <Tab fx:id="tabResult" text="Resultado">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
@@ -274,6 +274,9 @@
                            </content>
                         </ScrollPane>
                      </center>
+                     <top>
+                        <Button mnemonicParsing="false" onAction="#transferResultToFirstImage" text="Transferir para imagem 1" BorderPane.alignment="CENTER" />
+                     </top>
                   </BorderPane>
                </content>
             </Tab>

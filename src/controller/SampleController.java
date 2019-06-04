@@ -22,6 +22,8 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -70,6 +72,10 @@ public class SampleController {
 	@FXML private TextField qtColumns;
 	
 	@FXML private Slider cannyThreshold;
+	
+	@FXML private TabPane tabPane;
+	
+	@FXML private Tab tabResult;
 		
 	private Image firstImage;
 	private Image secondImage;
@@ -83,44 +89,52 @@ public class SampleController {
 	@FXML public void laplace() {
 		imageResult = ImageProcess.processLaplaceBorderDetection(firstImage);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void sobel() {
 		imageResult = ImageProcess.processSobelBorderDetection(firstImage);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void canny() {
 		imageResult = ImageProcess.processCannyBorderDetection(firstImage, cannyThreshold.getValue());
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void erode() {
 		imageResult = ImageProcess.erode(firstImage);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void dilate() {
 		imageResult = ImageProcess.dilate(firstImage);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	// Desafio Segmentação
 	@FXML public void challenge2() {
 		imageResult = ImageProcess.segmentate(firstImage, colorPicker1.getValue(), colorPicker2.getValue(), colorPicker3.getValue());
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	// Prova 1 questão 1
 	@FXML public void test1Question1() {
 		imageResult = ImageProcess.test1Question1(firstImage, Integer.parseInt(qtColumns.getText()));
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	// Prova 1 questão 2
 	@FXML public void test1Question2() {
 		imageResult = ImageProcess.test1Question2(firstImage, initialX, finalX, initialY, finalY);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	// Prova 1 questão 3
@@ -131,26 +145,31 @@ public class SampleController {
 	@FXML public void simulatedTestQuestion1() {
 		imageResult = ImageProcess.simulatedTestQuestion1(firstImage, Integer.parseInt(pixelDistanceQuestion1.getText()), colorPickerQuestion1.getValue());
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void simulatedTestQuestion2() {
 		imageResult = ImageProcess.simulatedTestQuestion2(firstImage);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void rotateRight() {
 		imageResult = ImageProcess.rotateRight(firstImage);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void rotateLeft() {
 		imageResult = ImageProcess.rotateLeft(firstImage);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void equalizeHistogram() {
 		imageResult = ImageProcess.equalizeHistogram(firstImage);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void openHistogramModal(ActionEvent event) {
@@ -205,11 +224,13 @@ public class SampleController {
 	@FXML public void addition() {
 		imageResult = ImageProcess.calcAddition(firstImage, secondImage, percTransp.getValue()/100, (100-percTransp.getValue())/100);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void subtraction() {
 		imageResult = ImageProcess.calcSubtraction(firstImage, secondImage);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void reduceNoise() {
@@ -226,6 +247,7 @@ public class SampleController {
 	@FXML public void challenge1() {
 		imageResult = ImageProcess.challenge1(firstImage);
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void negative() {
@@ -235,6 +257,7 @@ public class SampleController {
 			imageResult = ImageProcess.calcNegative(originalImage, 0, 0, 0, 0);
 		}
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void thresholding() {
@@ -244,6 +267,7 @@ public class SampleController {
 			imageResult = ImageProcess.calcThresholding(originalImage, thresholdSlider.getValue(), 0, 0, 0, 0);
 		}
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML public void grayScaleAverage() {
@@ -253,6 +277,7 @@ public class SampleController {
 			imageResult = ImageProcess.calcGrayScale(originalImage, 0, 0, 0, 0);
 		}
 		updateImageResult();
+		tabPane.getSelectionModel().select(tabResult);
 	}
 	
 	@FXML private void weightedAverage() {
@@ -269,6 +294,7 @@ public class SampleController {
 				imageResult = ImageProcess.calcWeightedAverage(originalImage, r, g, b, 0, 0, 0, 0);
 			}
 			updateImageResult();
+			tabPane.getSelectionModel().select(tabResult);
 		}
 	}
 	
@@ -368,6 +394,13 @@ public class SampleController {
 					"Não há nenhuma imagem modificada.", 
 					AlertType.ERROR);
 		}
+	}
+	
+	@FXML
+	public void transferResultToFirstImage() {
+		firstImage = imageResult;
+		originalImage = imageResult;
+		updateFirstImage();
 	}
 	
 	public boolean isDemarcated() {

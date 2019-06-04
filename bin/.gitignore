@@ -1,5 +1,6 @@
-/core/
-/view/
 /controller/
+/core/
+/enums/
+/model/
 /utils/
-/application/
+/view/
